@@ -25,7 +25,7 @@ export function useP2PGame({ role, handle, localPlayerId, initialState }: UseP2P
     if (role === 'host') {
       if (!initialState) throw new Error('Host requires an initial state')
       const guestPlayerId = initialState.players.find((p) => p.id !== localPlayerId)!.id
-      sessionRef.current = createHostSession(handle, initialState, guestPlayerId, setState)
+      sessionRef.current = createHostSession(handle, initialState, initialState.players, guestPlayerId, setState)
     } else {
       sessionRef.current = createGuestSession(handle, setState, setLastError)
     }
@@ -42,6 +42,10 @@ export function useP2PGame({ role, handle, localPlayerId, initialState }: UseP2P
     [role, localPlayerId]
   )
 
+  const rematch = useCallback(() => {
+    sessionRef.current?.rematch()
+  }, [])
+
   const legalActions = useMemo(() => (state ? enumerateLegalActions(state, localPlayerId) : []), [state, localPlayerId])
 
   return {
@@ -50,5 +54,6 @@ export function useP2PGame({ role, handle, localPlayerId, initialState }: UseP2P
     legalActions,
     currentPlayerId: state ? currentPlayer(state).id : localPlayerId,
     lastError,
+    rematch,
   }
 }

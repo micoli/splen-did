@@ -4,6 +4,7 @@ import { onMessage, sendMessage } from './webrtc'
 
 export interface GuestSession {
   submitIntent: (action: Action) => void
+  rematch: () => void
 }
 
 /** Guest never runs the reducer locally: it sends intents and waits for the host's authoritative state echo. */
@@ -19,5 +20,6 @@ export function createGuestSession(
 
   return {
     submitIntent: (action) => sendMessage(handle, { type: 'intent', action }),
+    rematch: () => sendMessage(handle, { type: 'rematchRequest' }),
   }
 }

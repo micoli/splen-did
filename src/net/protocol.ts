@@ -5,3 +5,4 @@ export type ProtocolMessage =
   | { type: 'intent'; action: Action }
   | { type: 'state'; state: GameState }
   | { type: 'error'; message: string }
+  | { type: 'rematchRequest' }

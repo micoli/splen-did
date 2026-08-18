@@ -37,14 +37,7 @@ function App() {
   }
 
   return (
-    <P2PGameScreen
-      key={session.key}
-      role={session.role}
-      handle={session.handle}
-      hostName="Hote"
-      guestName="Invite"
-      onRematch={() => setSession(null)}
-    />
+    <P2PGameScreen key={session.key} role={session.role} handle={session.handle} hostName="Hote" guestName="Invite" />
   )
 }
 
