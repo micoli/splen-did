@@ -1,19 +1,37 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
 
+const NAMES_STORAGE_KEY = 'splendor:hotseatNames'
+
+function loadStoredNames(): string[] {
+  try {
+    const stored = JSON.parse(localStorage.getItem(NAMES_STORAGE_KEY) || '[]')
+    return Array.isArray(stored) ? stored : []
+  } catch {
+    return []
+  }
+}
+
 interface HotseatSetupFormProps {
   onStart: (players: PlayerConfig[]) => void
 }
 
 export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
-  const [names, setNames] = useState(['Joueur 1', 'Joueur 2'])
+  const [names, setNames] = useState(() => {
+    const stored = loadStoredNames()
+    return [stored[0] || 'Joueur 1', stored[1] || 'Joueur 2']
+  })
+
+  function updateNames(next: string[]) {
+    setNames(next)
+    localStorage.setItem(NAMES_STORAGE_KEY, JSON.stringify(next))
+  }
 
   function setPlayerCount(count: number) {
-    setNames((prev) => {
-      const next = [...prev]
-      while (next.length < count) next.push(`Joueur ${next.length + 1}`)
-      return next.slice(0, count)
-    })
+    const stored = loadStoredNames()
+    const next = [...names]
+    while (next.length < count) next.push(stored[next.length] || `Joueur ${next.length + 1}`)
+    updateNames(next.slice(0, count))
   }
 
   function handleSubmit() {
@@ -35,7 +53,7 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
         <div key={i} style={{ marginBottom: 8 }}>
           <input
             value={name}
-            onChange={(e) => setNames((prev) => prev.map((n, idx) => (idx === i ? e.target.value : n)))}
+            onChange={(e) => updateNames(names.map((n, idx) => (idx === i ? e.target.value : n)))}
             placeholder={`Joueur ${i + 1}`}
           />
         </div>
