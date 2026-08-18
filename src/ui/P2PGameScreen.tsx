@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { createInitialState } from '../engine/setup'
 import { useP2PGame } from '../hooks/useP2PGame'
 import type { PeerHandle } from '../net/webrtc'
@@ -31,6 +32,15 @@ export function P2PGameScreen({ role, handle, hostName, guestName }: P2PGameScre
     localPlayerId,
     initialState,
   })
+
+  useEffect(() => {
+    function onBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault()
+      event.returnValue = ''
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => window.removeEventListener('beforeunload', onBeforeUnload)
+  }, [])
 
   if (!state) {
     return (
