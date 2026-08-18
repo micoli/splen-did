@@ -19,16 +19,38 @@ interface BoardProps {
   lastError: string | null
   dispatch: (action: Action) => void
   onRematch: () => void
+  localPlayerId?: string
 }
 
-export function Board({ state, legalActions, currentPlayerId, lastError, dispatch, onRematch }: BoardProps) {
+export function Board({ state, legalActions, currentPlayerId, lastError, dispatch, onRematch, localPlayerId }: BoardProps) {
   const [mode, setMode] = useState<InteractionMode>('idle')
   const [selectedColors, setSelectedColors] = useState<TokenColor[]>([])
+  const [showYourTurnToast, setShowYourTurnToast] = useState(false)
 
   useEffect(() => {
     setMode('idle')
     setSelectedColors([])
   }, [currentPlayerId, state.turnPhase])
+
+  const currentPlayer = state.players.find((p) => p.id === currentPlayerId)
+  const isMyTurn = localPlayerId ? currentPlayerId === localPlayerId : !currentPlayer?.isAI
+
+  useEffect(() => {
+    if (!isMyTurn) return
+    setShowYourTurnToast(true)
+    const timer = setTimeout(() => setShowYourTurnToast(false), 2500)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlayerId])
+
+  const [showError, setShowError] = useState(false)
+
+  useEffect(() => {
+    if (!lastError) return
+    setShowError(true)
+    const timer = setTimeout(() => setShowError(false), 5000)
+    return () => clearTimeout(timer)
+  }, [lastError])
 
   const take3Actions = legalActions.filter(
     (a): a is Extract<Action, { type: 'TAKE_THREE_DIFFERENT' }> => a.type === 'TAKE_THREE_DIFFERENT'
@@ -40,7 +62,7 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
   )
   const claimActions = legalActions.filter((a): a is Extract<Action, { type: 'CLAIM_NOBLE' }> => a.type === 'CLAIM_NOBLE')
 
-  const isAITurn = state.players.find((p) => p.id === currentPlayerId)?.isAI ?? false
+  const isAITurn = currentPlayer?.isAI ?? false
 
   const take3RequiredCount = take3Actions[0]?.colors.length ?? 0
   const take3SelectableColors = new Set(take3Actions.flatMap((a) => a.colors))
@@ -91,6 +113,7 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
   return (
     <div className="board">
       <div className="board-main">
+        <div className="turn-banner">Au tour de {currentPlayer?.name}</div>
         <div className="panel">
           <NobleRow
             nobleIds={state.nobles}
@@ -173,7 +196,9 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
 
       {state.gameOver && <GameOverScreen state={state} onRematch={onRematch} />}
 
-      {lastError && <div className="error-toast">{lastError}</div>}
+      {showError && lastError && <div className="error-toast">{lastError}</div>}
+
+      {showYourTurnToast && <div className="your-turn-toast">C'est a toi !</div>}
     </div>
   )
 }
