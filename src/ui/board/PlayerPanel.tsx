@@ -1,7 +1,5 @@
 import { playerPrestige } from '../../engine/selectors'
-import { TOKEN_COLORS } from '../../engine/types'
 import type { PlayerState } from '../../engine/types'
-import { GemIcon } from '../shared/GemIcon'
 import { PrestigeBadge } from '../shared/PrestigeBadge'
 import { PlayerTableau } from './PlayerTableau'
 import { ReservedCards } from './ReservedCards'
@@ -27,19 +25,7 @@ export function PlayerPanel({
         <strong>{player.name}</strong>
         <PrestigeBadge points={playerPrestige(player)} />
       </div>
-      <div className="player-panel__tokens">
-        {TOKEN_COLORS.filter((color) => player.tokens[color] > 0).map((color) => (
-          <span key={color}>
-            <GemIcon color={color} size="small" /> {player.tokens[color]}
-          </span>
-        ))}
-        {player.tokens.gold > 0 && (
-          <span>
-            <GemIcon color="gold" size="small" /> {player.tokens.gold}
-          </span>
-        )}
-      </div>
-      <PlayerTableau bonuses={player.bonuses} />
+      <PlayerTableau tokens={player.tokens} bonuses={player.bonuses} />
       <ReservedCards
         cardIds={player.reservedCardIds}
         revealed

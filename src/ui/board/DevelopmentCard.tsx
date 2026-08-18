@@ -14,7 +14,7 @@ export function DevelopmentCard({ card, hidden, affordable = true, clickable, on
     return <div className="dev-card" aria-label="Hidden reserved card" />
   }
 
-  const classes = ['dev-card']
+  const classes = ['dev-card', `dev-card--bonus-${card.bonus}`]
   if (clickable) classes.push('dev-card--clickable')
   if (!affordable) classes.push('dev-card--unaffordable')
 
@@ -26,10 +26,7 @@ export function DevelopmentCard({ card, hidden, affordable = true, clickable, on
       </div>
       <div className="dev-card__cost">
         {(Object.entries(card.cost) as [TokenColor, number][]).map(([color, amount]) => (
-          <div key={color} className="dev-card__cost-row">
-            <GemIcon color={color} size="small" />
-            <span>{amount}</span>
-          </div>
+          <GemIcon key={color} color={color} size="small" count={amount} />
         ))}
       </div>
     </div>

@@ -89,11 +89,6 @@
   background: rgba(164, 120, 60, 0.18);
 }
 
-.token-pile__count {
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .card-grid {
   display: flex;
   flex-direction: column;
@@ -108,7 +103,7 @@
 
 .card-row__deck {
   width: 90px;
-  height: 130px;
+  height: 92px;
   border-radius: 8px;
   border: 1px solid var(--border);
   display: flex;
@@ -130,15 +125,36 @@
 
 .dev-card {
   width: 90px;
-  height: 130px;
+  min-height: 92px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--panel-bg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 6px;
   padding: 6px;
   text-align: left;
+}
+
+.dev-card--bonus-white {
+  background: color-mix(in srgb, var(--gem-white) 30%, var(--panel-bg));
+}
+
+.dev-card--bonus-blue {
+  background: color-mix(in srgb, var(--gem-blue) 16%, var(--panel-bg));
+}
+
+.dev-card--bonus-green {
+  background: color-mix(in srgb, var(--gem-green) 16%, var(--panel-bg));
+}
+
+.dev-card--bonus-red {
+  background: color-mix(in srgb, var(--gem-red) 16%, var(--panel-bg));
+}
+
+.dev-card--bonus-black {
+  background: color-mix(in srgb, var(--gem-black) 12%, var(--panel-bg));
 }
 
 .dev-card--clickable {
@@ -161,15 +177,8 @@
 
 .dev-card__cost {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.dev-card__cost-row {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 3px;
-  font-size: 11px;
 }
 
 .action-bar {
@@ -214,18 +223,24 @@
   margin-bottom: 8px;
 }
 
-.player-panel__tokens {
+.player-panel__tableau {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-.player-panel__bonuses {
+.player-panel__color-column {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin-bottom: 6px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 24px;
+}
+
+.player-panel__bonus-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-height: 14px;
 }
 
 .player-panel__reserved {
@@ -274,4 +289,77 @@
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
+  max-width: 90vw;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .board {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .card-row {
+    flex-wrap: wrap;
+  }
+
+  .card-row__cards {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .dev-card {
+    width: 72px;
+    min-height: 80px;
+  }
+
+  .card-row__deck {
+    width: 72px;
+    height: 80px;
+  }
+
+  .noble-tile {
+    width: 52px;
+    height: 52px;
+    font-size: 10px;
+    gap: 2px;
+  }
+
+  .gem-icon--large {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .panel {
+    padding: 10px;
+  }
+
+  .action-bar {
+    gap: 6px;
+  }
+
+  .action-bar button {
+    flex: 1 1 45%;
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+
+  .player-panel__tableau {
+    gap: 6px;
+  }
+
+  .player-panel__color-column {
+    min-width: 20px;
+  }
+
+  .modal {
+    width: 92vw;
+    padding: 16px;
+    max-height: 85svh;
+    overflow-y: auto;
+  }
 }

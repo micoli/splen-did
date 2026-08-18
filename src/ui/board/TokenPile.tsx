@@ -15,8 +15,7 @@ export function TokenPile({ color, count, selected, onClick }: TokenPileProps) {
 
   return (
     <button type="button" className={classes.join(' ')} onClick={onClick} disabled={!onClick}>
-      <GemIcon color={color} size="large" />
-      <span className="token-pile__count">{count}</span>
+      <GemIcon color={color} size="large" count={count} />
     </button>
   )
 }

@@ -15,11 +15,11 @@ export function NobleTile({ noble, claimable, onClick }: NobleTileProps) {
       onClick={claimable ? onClick : undefined}
       disabled={!claimable}
     >
-      <span>{noble.points} pts</span>
+      <span>{noble.points}</span>
       <span className="noble-tile__requirement">
         {(Object.entries(noble.requirement) as [TokenColor, number][]).map(([color, amount]) => (
-          <span key={color} title={`${amount} ${color}`}>
-            <GemIcon color={color} size="small" />
+          <span key={color}>
+            <GemIcon color={color} size="small" count={amount} />
           </span>
         ))}
       </span>
