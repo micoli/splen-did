@@ -180,7 +180,7 @@
 
 .dev-card {
   box-sizing: border-box;
-  width: 90px;
+  width: 80px;
   min-height: 92px;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -377,8 +377,18 @@
   }
 
   .dev-card {
-    width: 72px;
+    width: 65px;
     min-height: 80px;
+  }
+
+  .token-bank {
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+
+  .token-pile {
+    gap: 2px;
+    padding: 2px;
   }
 
   .noble-tile {
