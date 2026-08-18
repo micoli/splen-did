@@ -3,7 +3,6 @@ import { CardRow } from './CardRow'
 
 interface CardGridProps {
   visibleCards: GameState['visibleCards']
-  decks: GameState['decks']
   clickableCardIds?: Set<string>
   affordableCardIds?: Set<string>
   onCardClick?: (cardId: string) => void
@@ -13,7 +12,6 @@ interface CardGridProps {
 
 export function CardGrid({
   visibleCards,
-  decks,
   clickableCardIds,
   affordableCardIds,
   onCardClick,
@@ -27,7 +25,6 @@ export function CardGrid({
           key={level}
           level={level}
           visibleCardIds={visibleCards[level]}
-          deckCount={decks[level].length}
           clickableCardIds={clickableCardIds}
           affordableCardIds={affordableCardIds}
           onCardClick={onCardClick}

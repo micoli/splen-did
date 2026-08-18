@@ -5,7 +5,6 @@ import { DevelopmentCard } from './DevelopmentCard'
 interface CardRowProps {
   level: CardLevel
   visibleCardIds: (string | null)[]
-  deckCount: number
   clickableCardIds?: Set<string>
   affordableCardIds?: Set<string>
   onCardClick?: (cardId: string) => void
@@ -16,7 +15,6 @@ interface CardRowProps {
 export function CardRow({
   level,
   visibleCardIds,
-  deckCount,
   clickableCardIds,
   affordableCardIds,
   onCardClick,
@@ -24,14 +22,12 @@ export function CardRow({
   deckClickable,
 }: CardRowProps) {
   return (
-    <div className="card-row">
-      <div
-        className={`card-row__deck card-row__deck--level-${level}`}
-        onClick={deckClickable ? onDeckClick : undefined}
-        role={deckClickable ? 'button' : undefined}
-      >
-        {deckCount}
-      </div>
+    <div className={`card-row card-row--level-${level}`}>
+      {deckClickable && (
+        <button type="button" className="card-row__deck-reserve" onClick={onDeckClick}>
+          Piocher
+        </button>
+      )}
       <div className="card-row__cards">
         {visibleCardIds.map((cardId, index) =>
           cardId ? (
@@ -43,7 +39,7 @@ export function CardRow({
               onClick={() => onCardClick?.(cardId)}
             />
           ) : (
-            <div key={`empty-${level}-${index}`} className="dev-card" aria-hidden="true" />
+            <div key={`empty-${index}`} className="dev-card" aria-hidden="true" />
           )
         )}
       </div>

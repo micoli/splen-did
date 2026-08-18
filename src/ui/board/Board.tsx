@@ -92,12 +92,14 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
     <div className="board">
       <div className="board-main">
         <div className="panel">
-          <NobleRow nobleIds={state.nobles} />
+          <NobleRow
+            nobleIds={state.nobles}
+            deckCounts={{ 1: state.decks[1].length, 2: state.decks[2].length, 3: state.decks[3].length }}
+          />
         </div>
         <div className="panel">
           <CardGrid
             visibleCards={state.visibleCards}
-            decks={state.decks}
             clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
             affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
             onCardClick={onCardClick}
