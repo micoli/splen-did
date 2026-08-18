@@ -1,4 +1,5 @@
 .gem-icon {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -33,26 +34,61 @@
   color: #333;
   text-shadow: none;
   border-radius: 50%;
+  border: 1.5px solid #d8d8d8;
 }
 
-.gem-icon--blue {
-  background: var(--gem-blue);
+.gem-icon--blue,
+.gem-icon--green,
+.gem-icon--red,
+.gem-icon--black {
+  background: #d8d8d8;
+  position: relative;
+}
+
+.gem-icon--blue::before,
+.gem-icon--green::before,
+.gem-icon--red::before,
+.gem-icon--black::before {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+}
+
+.gem-icon--blue,
+.gem-icon--blue::before {
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 
-.gem-icon--green {
-  background: var(--gem-green);
+.gem-icon--green,
+.gem-icon--green::before {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
-.gem-icon--red {
-  background: var(--gem-red);
+.gem-icon--red,
+.gem-icon--red::before {
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
-.gem-icon--black {
-  background: var(--gem-black);
+.gem-icon--black,
+.gem-icon--black::before {
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.gem-icon--blue::before {
+  background: var(--gem-blue);
+}
+
+.gem-icon--green::before {
+  background: var(--gem-green);
+}
+
+.gem-icon--red::before {
+  background: var(--gem-red);
+}
+
+.gem-icon--black::before {
+  background: var(--gem-black);
 }
 
 .gem-icon--gold {
@@ -60,4 +96,5 @@
   color: #4a3800;
   text-shadow: none;
   border-radius: 50%;
+  border: 1.5px solid #d8d8d8;
 }
