@@ -179,7 +179,7 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
         ))}
       </div>
 
-      {discardingPlayer && !isAITurn && (
+      {discardingPlayer && isMyTurn && (
         <DiscardModal
           player={discardingPlayer}
           excess={totalTokens(discardingPlayer) - 10}
@@ -187,7 +187,7 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
         />
       )}
 
-      {state.turnPhase === 'nobleClaim' && !isAITurn && (
+      {state.turnPhase === 'nobleClaim' && isMyTurn && (
         <NobleClaimBanner
           eligibleNobleIds={claimActions.map((a) => a.nobleId)}
           onClaim={(nobleId) => dispatch({ type: 'CLAIM_NOBLE', nobleId })}
