@@ -36,6 +36,7 @@ export function CardRow({
               card={getCardDef(cardId)}
               clickable={clickableCardIds?.has(cardId)}
               affordable={affordableCardIds ? affordableCardIds.has(cardId) : true}
+              purchasable={affordableCardIds?.has(cardId)}
               onClick={() => onCardClick?.(cardId)}
             />
           ) : (

@@ -6,16 +6,18 @@ interface DevelopmentCardProps {
   hidden?: boolean
   affordable?: boolean
   clickable?: boolean
+  purchasable?: boolean
   onClick?: () => void
 }
 
-export function DevelopmentCard({ card, hidden, affordable = true, clickable, onClick }: DevelopmentCardProps) {
+export function DevelopmentCard({ card, hidden, affordable = true, clickable, purchasable, onClick }: DevelopmentCardProps) {
   if (hidden) {
     return <div className="dev-card" aria-label="Hidden reserved card" />
   }
 
   const classes = ['dev-card', `dev-card--bonus-${card.bonus}`]
   if (clickable) classes.push('dev-card--clickable')
+  if (purchasable) classes.push('dev-card--purchasable')
   if (!affordable) classes.push('dev-card--unaffordable')
 
   return (
