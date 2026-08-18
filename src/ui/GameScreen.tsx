@@ -9,6 +9,7 @@ import { Board } from './board/Board'
 interface GameScreenProps {
   players: PlayerConfig[]
   onRematch: () => void
+  onExit: () => void
 }
 
 interface RestartConfirming {
@@ -18,7 +19,7 @@ interface RestartConfirming {
 
 type RestartState = { phase: 'idle' } | RestartConfirming
 
-export function GameScreen({ players, onRematch }: GameScreenProps) {
+export function GameScreen({ players, onRematch, onExit }: GameScreenProps) {
   const initialState = useMemo(() => createInitialState({ players }), [players])
   const { state, dispatch, legalActions, currentPlayerId, lastError, resetState } = useGameEngine(initialState)
   useAIPlayer(state, dispatch)
@@ -58,6 +59,7 @@ export function GameScreen({ players, onRematch }: GameScreenProps) {
       lastError={lastError}
       dispatch={dispatch}
       onRematch={onRematch}
+      onExit={onExit}
       onProposeRestart={onProposeRestart}
       restartPrompt={pendingPlayer ? `${pendingPlayer.name}, acceptez-vous de redemarrer la partie ?` : undefined}
       onRespondRestart={onRespondRestart}

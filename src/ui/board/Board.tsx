@@ -20,6 +20,7 @@ interface BoardProps {
   lastError: string | null
   dispatch: (action: Action) => void
   onRematch: () => void
+  onExit: () => void
   localPlayerId?: string
   onProposeRestart: () => void
   restartAwaiting?: boolean
@@ -34,6 +35,7 @@ export function Board({
   lastError,
   dispatch,
   onRematch,
+  onExit,
   localPlayerId,
   onProposeRestart,
   restartAwaiting,
@@ -127,6 +129,10 @@ export function Board({
 
   const discardingPlayer = state.turnPhase === 'discard' ? state.players.find((p) => p.id === currentPlayerId) : undefined
 
+  function handleExit() {
+    if (window.confirm('Quitter la partie et revenir a l\'accueil ?')) onExit()
+  }
+
   return (
     <div className="board">
       <div className="board-main">
@@ -179,13 +185,6 @@ export function Board({
             />
           )}
         </div>
-        {!state.gameOver && (
-          <div className="panel">
-            <button type="button" onClick={onProposeRestart} disabled={restartAwaiting}>
-              {restartAwaiting ? 'En attente de la reponse...' : 'Proposer un redemarrage'}
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="board-side">
@@ -201,6 +200,17 @@ export function Board({
             onReservedCardClick={onCardClick}
           />
         ))}
+      </div>
+
+      <div className="board-footer panel">
+        {!state.gameOver && (
+          <button type="button" onClick={onProposeRestart} disabled={restartAwaiting}>
+            {restartAwaiting ? 'En attente de la reponse...' : 'Proposer un redemarrage'}
+          </button>
+        )}
+        <button type="button" onClick={handleExit}>
+          Retour a l'accueil
+        </button>
       </div>
 
       {discardingPlayer && isMyTurn && (

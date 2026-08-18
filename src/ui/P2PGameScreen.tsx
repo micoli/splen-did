@@ -12,9 +12,10 @@ interface P2PGameScreenProps {
   handle: PeerHandle
   hostName: string
   guestName: string
+  onExit: () => void
 }
 
-export function P2PGameScreen({ role, handle, hostName, guestName }: P2PGameScreenProps) {
+export function P2PGameScreen({ role, handle, hostName, guestName, onExit }: P2PGameScreenProps) {
   const initialState =
     role === 'host'
       ? createInitialState({
@@ -52,6 +53,7 @@ export function P2PGameScreen({ role, handle, hostName, guestName }: P2PGameScre
       lastError={lastError}
       dispatch={dispatch}
       onRematch={rematch}
+      onExit={onExit}
       localPlayerId={localPlayerId}
       onProposeRestart={proposeRestart}
       restartAwaiting={restartPhase === 'awaitingPeer'}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
 
-const NAME_STORAGE_KEY = 'splendor:playerName'
+const NAME_STORAGE_KEY = 'Splen-did:playerName'
 
 interface SoloSetupFormProps {
   onStart: (players: PlayerConfig[]) => void
@@ -24,12 +24,12 @@ export function SoloSetupForm({ onStart }: SoloSetupFormProps) {
   }
 
   return (
-    <div className="panel">
+    <div className="setup-panel">
       <h3>Solo contre l'ordinateur</h3>
-      <div style={{ marginBottom: 12 }}>
+      <div className="setup-panel__field">
         <input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="Votre nom" />
       </div>
-      <button type="button" onClick={handleSubmit}>
+      <button type="button" className="setup-panel__cta" onClick={handleSubmit}>
         Commencer la partie
       </button>
     </div>

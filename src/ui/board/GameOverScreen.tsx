@@ -21,7 +21,7 @@ export function GameOverScreen({ state, onRematch }: GameOverScreenProps) {
             </li>
           ))}
         </ol>
-        <button type="button" onClick={onRematch}>
+        <button type="button" className="btn-primary" onClick={onRematch}>
           Nouvelle partie
         </button>
       </div>

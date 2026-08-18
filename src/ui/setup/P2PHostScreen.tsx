@@ -43,7 +43,7 @@ export function P2PHostScreen({ onConnected }: P2PHostScreenProps) {
     <div className="panel">
       <h3>Heberger une partie</h3>
       {step === 'idle' && (
-        <button type="button" onClick={handleCreateOffer}>
+        <button type="button" className="btn-primary" onClick={handleCreateOffer}>
           Creer la partie
         </button>
       )}
@@ -78,7 +78,7 @@ export function P2PHostScreen({ onConnected }: P2PHostScreenProps) {
               </button>
             </>
           )}
-          <button type="button" onClick={handleConnect} disabled={!answerInput.trim() || step === 'connecting'}>
+          <button type="button" className="btn-primary" onClick={handleConnect} disabled={!answerInput.trim() || step === 'connecting'}>
             {step === 'connecting' ? 'Connexion en cours...' : 'Connecter'}
           </button>
         </>

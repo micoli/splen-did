@@ -20,6 +20,12 @@
   gap: 12px;
 }
 
+.board-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+}
+
 .panel {
   background: var(--panel-bg);
   border: 1px solid var(--border);

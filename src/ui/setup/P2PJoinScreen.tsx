@@ -58,7 +58,7 @@ export function P2PJoinScreen({ onConnected }: P2PJoinScreenProps) {
               </button>
             </>
           )}
-          <button type="button" onClick={handleJoin} disabled={!offerInput.trim()}>
+          <button type="button" className="btn-primary" onClick={handleJoin} disabled={!offerInput.trim()}>
             Rejoindre
           </button>
         </>

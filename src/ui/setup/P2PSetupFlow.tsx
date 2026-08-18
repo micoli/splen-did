@@ -14,10 +14,10 @@ export function P2PSetupFlow({ onConnected }: P2PSetupFlowProps) {
 
   if (choice === 'none') {
     return (
-      <div className="panel">
+      <div className="setup-panel">
         <h3>Partie en ligne (P2P, sans serveur)</h3>
         <p>Aucun serveur n'est utilise : un code doit etre echange manuellement entre les deux joueurs.</p>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="setup-panel__actions">
           <button type="button" onClick={() => setChoice('host')}>
             Heberger
           </button>

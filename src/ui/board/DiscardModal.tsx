@@ -46,7 +46,7 @@ export function DiscardModal({ player, excess, onDiscard }: DiscardModalProps) {
               </button>
             </div>
           ))}
-        <button type="button" disabled={pickedTotal !== excess} onClick={() => onDiscard(picked)}>
+        <button type="button" className="btn-primary" disabled={pickedTotal !== excess} onClick={() => onDiscard(picked)}>
           Confirmer la defausse
         </button>
       </div>

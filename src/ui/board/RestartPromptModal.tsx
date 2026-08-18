@@ -11,7 +11,7 @@ export function RestartPromptModal({ message, onAccept, onDecline }: RestartProm
         <h3>Redemarrer la partie ?</h3>
         <p>{message}</p>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button type="button" onClick={onAccept}>
+          <button type="button" className="btn-primary" onClick={onAccept}>
             Accepter
           </button>
           <button type="button" onClick={onDecline}>

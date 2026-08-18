@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
 
-const NAMES_STORAGE_KEY = 'splendor:hotseatNames'
+const NAMES_STORAGE_KEY = 'Splen-did:hotseatNames'
 
 function loadStoredNames(): string[] {
   try {
@@ -40,9 +40,9 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
   }
 
   return (
-    <div className="panel">
+    <div className="setup-panel">
       <h3>Partie locale (pass-and-play)</h3>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+      <div className="setup-panel__toggle-row">
         {[2, 3, 4].map((count) => (
           <button key={count} type="button" className={names.length === count ? 'active' : ''} onClick={() => setPlayerCount(count)}>
             {count} joueurs
@@ -50,7 +50,7 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
         ))}
       </div>
       {names.map((name, i) => (
-        <div key={i} style={{ marginBottom: 8 }}>
+        <div key={i} className="setup-panel__field">
           <input
             value={name}
             onChange={(e) => updateNames(names.map((n, idx) => (idx === i ? e.target.value : n)))}
@@ -58,7 +58,7 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
           />
         </div>
       ))}
-      <button type="button" onClick={handleSubmit}>
+      <button type="button" className="setup-panel__cta" onClick={handleSubmit}>
         Commencer la partie
       </button>
     </div>

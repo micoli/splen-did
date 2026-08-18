@@ -33,11 +33,25 @@ function App() {
   }
 
   if (session.type === 'local') {
-    return <GameScreen key={session.key} players={session.players} onRematch={() => setSession(null)} />
+    return (
+      <GameScreen
+        key={session.key}
+        players={session.players}
+        onRematch={() => setSession(null)}
+        onExit={() => setSession(null)}
+      />
+    )
   }
 
   return (
-    <P2PGameScreen key={session.key} role={session.role} handle={session.handle} hostName="Hote" guestName="Invite" />
+    <P2PGameScreen
+      key={session.key}
+      role={session.role}
+      handle={session.handle}
+      hostName="Hote"
+      guestName="Invite"
+      onExit={() => setSession(null)}
+    />
   )
 }
 

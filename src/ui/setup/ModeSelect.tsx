@@ -5,18 +5,26 @@ interface ModeSelectProps {
   onSelect: (mode: GameMode) => void
 }
 
+const MODE_OPTIONS: { mode: GameMode; icon: string; label: string }[] = [
+  { mode: 'solo', icon: '\u{1F916}', label: 'Solo vs IA' },
+  { mode: 'hotseat', icon: '\u{1F465}', label: 'Local' },
+  { mode: 'p2p', icon: '\u{1F310}', label: 'En ligne' },
+]
+
 export function ModeSelect({ mode, onSelect }: ModeSelectProps) {
   return (
-    <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-      <button type="button" className={mode === 'solo' ? 'active' : ''} onClick={() => onSelect('solo')}>
-        Solo vs IA
-      </button>
-      <button type="button" className={mode === 'hotseat' ? 'active' : ''} onClick={() => onSelect('hotseat')}>
-        Local (pass-and-play)
-      </button>
-      <button type="button" className={mode === 'p2p' ? 'active' : ''} onClick={() => onSelect('p2p')}>
-        En ligne (P2P)
-      </button>
+    <div className="mode-select">
+      {MODE_OPTIONS.map((option) => (
+        <button
+          key={option.mode}
+          type="button"
+          className={`mode-select__option${mode === option.mode ? ' active' : ''}`}
+          onClick={() => onSelect(option.mode)}
+        >
+          <span className="mode-select__icon">{option.icon}</span>
+          {option.label}
+        </button>
+      ))}
     </div>
   )
 }

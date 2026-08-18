@@ -1,4 +1,4 @@
-# Splendor
+# Splen-did
 
 Version web du jeu de societe [Splendor](https://www.regledujeu.fr/splendor/), en TypeScript + React, sans backend.
 
