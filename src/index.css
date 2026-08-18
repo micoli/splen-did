@@ -1,0 +1,58 @@
+:root {
+  --bg: #f4f1ea;
+  --panel-bg: #ffffff;
+  --text: #1e1b16;
+  --text-muted: #6b6355;
+  --border: #d8d2c4;
+  --accent: #a4783c;
+
+  --gem-white: #f5f2e8;
+  --gem-blue: #2d6fb0;
+  --gem-green: #2f8f5b;
+  --gem-red: #c0392b;
+  --gem-black: #2b2b2b;
+  --gem-gold: #d4af37;
+
+  color-scheme: light dark;
+  font: 16px/1.4 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1a17;
+    --panel-bg: #262320;
+    --text: #f0ece2;
+    --text-muted: #a89f8e;
+    --border: #3a352e;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+h1, h2, h3 {
+  margin: 0;
+}

@@ -1,0 +1,105 @@
+import type { CardDef } from '../types'
+
+export const CARDS: CardDef[] = [
+  // Level 1 (40 cards)
+  { id: 'L1-01', level: 1, points: 0, bonus: 'black', cost: { blue: 1, green: 1, red: 1, white: 1 } },
+  { id: 'L1-02', level: 1, points: 0, bonus: 'black', cost: { blue: 2, green: 1, red: 1, white: 1 } },
+  { id: 'L1-03', level: 1, points: 0, bonus: 'black', cost: { blue: 2, red: 1, white: 2 } },
+  { id: 'L1-04', level: 1, points: 0, bonus: 'black', cost: { black: 1, green: 1, red: 3 } },
+  { id: 'L1-05', level: 1, points: 0, bonus: 'black', cost: { green: 2, red: 1 } },
+  { id: 'L1-06', level: 1, points: 0, bonus: 'black', cost: { green: 2, white: 2 } },
+  { id: 'L1-07', level: 1, points: 0, bonus: 'black', cost: { green: 3 } },
+  { id: 'L1-08', level: 1, points: 1, bonus: 'black', cost: { blue: 4 } },
+  { id: 'L1-09', level: 1, points: 0, bonus: 'blue', cost: { black: 1, green: 1, red: 1, white: 1 } },
+  { id: 'L1-10', level: 1, points: 0, bonus: 'blue', cost: { black: 1, green: 1, red: 2, white: 1 } },
+  { id: 'L1-11', level: 1, points: 0, bonus: 'blue', cost: { green: 2, red: 2, white: 1 } },
+  { id: 'L1-12', level: 1, points: 0, bonus: 'blue', cost: { blue: 1, green: 3, red: 1 } },
+  { id: 'L1-13', level: 1, points: 0, bonus: 'blue', cost: { black: 2, white: 1 } },
+  { id: 'L1-14', level: 1, points: 0, bonus: 'blue', cost: { black: 2, green: 2 } },
+  { id: 'L1-15', level: 1, points: 0, bonus: 'blue', cost: { black: 3 } },
+  { id: 'L1-16', level: 1, points: 1, bonus: 'blue', cost: { red: 4 } },
+  { id: 'L1-17', level: 1, points: 0, bonus: 'white', cost: { black: 1, blue: 1, green: 1, red: 1 } },
+  { id: 'L1-18', level: 1, points: 0, bonus: 'white', cost: { black: 1, blue: 1, green: 2, red: 1 } },
+  { id: 'L1-19', level: 1, points: 0, bonus: 'white', cost: { black: 1, blue: 2, green: 2 } },
+  { id: 'L1-20', level: 1, points: 0, bonus: 'white', cost: { black: 1, blue: 1, white: 3 } },
+  { id: 'L1-21', level: 1, points: 0, bonus: 'white', cost: { black: 1, red: 2 } },
+  { id: 'L1-22', level: 1, points: 0, bonus: 'white', cost: { black: 2, blue: 2 } },
+  { id: 'L1-23', level: 1, points: 0, bonus: 'white', cost: { blue: 3 } },
+  { id: 'L1-24', level: 1, points: 1, bonus: 'white', cost: { green: 4 } },
+  { id: 'L1-25', level: 1, points: 0, bonus: 'green', cost: { black: 1, blue: 1, red: 1, white: 1 } },
+  { id: 'L1-26', level: 1, points: 0, bonus: 'green', cost: { black: 2, blue: 1, red: 1, white: 1 } },
+  { id: 'L1-27', level: 1, points: 0, bonus: 'green', cost: { black: 2, blue: 1, red: 2 } },
+  { id: 'L1-28', level: 1, points: 0, bonus: 'green', cost: { blue: 3, green: 1, white: 1 } },
+  { id: 'L1-29', level: 1, points: 0, bonus: 'green', cost: { blue: 1, white: 2 } },
+  { id: 'L1-30', level: 1, points: 0, bonus: 'green', cost: { blue: 2, red: 2 } },
+  { id: 'L1-31', level: 1, points: 0, bonus: 'green', cost: { red: 3 } },
+  { id: 'L1-32', level: 1, points: 1, bonus: 'green', cost: { black: 4 } },
+  { id: 'L1-33', level: 1, points: 0, bonus: 'red', cost: { black: 1, blue: 1, green: 1, white: 1 } },
+  { id: 'L1-34', level: 1, points: 0, bonus: 'red', cost: { black: 1, blue: 1, green: 1, white: 2 } },
+  { id: 'L1-35', level: 1, points: 0, bonus: 'red', cost: { black: 2, green: 1, white: 2 } },
+  { id: 'L1-36', level: 1, points: 0, bonus: 'red', cost: { black: 3, red: 1, white: 1 } },
+  { id: 'L1-37', level: 1, points: 0, bonus: 'red', cost: { blue: 2, green: 1 } },
+  { id: 'L1-38', level: 1, points: 0, bonus: 'red', cost: { red: 2, white: 2 } },
+  { id: 'L1-39', level: 1, points: 0, bonus: 'red', cost: { white: 3 } },
+  { id: 'L1-40', level: 1, points: 1, bonus: 'red', cost: { white: 4 } },
+  // Level 2 (30 cards)
+  { id: 'L2-01', level: 2, points: 1, bonus: 'black', cost: { blue: 2, green: 2, white: 3 } },
+  { id: 'L2-02', level: 2, points: 1, bonus: 'black', cost: { black: 2, green: 3, white: 3 } },
+  { id: 'L2-03', level: 2, points: 2, bonus: 'black', cost: { blue: 1, green: 4, red: 2 } },
+  { id: 'L2-04', level: 2, points: 2, bonus: 'black', cost: { green: 5, red: 3 } },
+  { id: 'L2-05', level: 2, points: 2, bonus: 'black', cost: { white: 5 } },
+  { id: 'L2-06', level: 2, points: 3, bonus: 'black', cost: { black: 6 } },
+  { id: 'L2-07', level: 2, points: 1, bonus: 'blue', cost: { blue: 2, green: 2, red: 3 } },
+  { id: 'L2-08', level: 2, points: 1, bonus: 'blue', cost: { black: 3, blue: 2, green: 3 } },
+  { id: 'L2-09', level: 2, points: 2, bonus: 'blue', cost: { blue: 3, white: 5 } },
+  { id: 'L2-10', level: 2, points: 2, bonus: 'blue', cost: { black: 4, red: 1, white: 2 } },
+  { id: 'L2-11', level: 2, points: 2, bonus: 'blue', cost: { blue: 5 } },
+  { id: 'L2-12', level: 2, points: 3, bonus: 'blue', cost: { blue: 6 } },
+  { id: 'L2-13', level: 2, points: 1, bonus: 'white', cost: { black: 2, green: 3, red: 2 } },
+  { id: 'L2-14', level: 2, points: 1, bonus: 'white', cost: { blue: 3, red: 3, white: 2 } },
+  { id: 'L2-15', level: 2, points: 2, bonus: 'white', cost: { black: 2, green: 1, red: 4 } },
+  { id: 'L2-16', level: 2, points: 2, bonus: 'white', cost: { black: 3, red: 5 } },
+  { id: 'L2-17', level: 2, points: 2, bonus: 'white', cost: { red: 5 } },
+  { id: 'L2-18', level: 2, points: 3, bonus: 'white', cost: { white: 6 } },
+  { id: 'L2-19', level: 2, points: 1, bonus: 'green', cost: { green: 2, red: 3, white: 3 } },
+  { id: 'L2-20', level: 2, points: 1, bonus: 'green', cost: { black: 2, blue: 3, white: 2 } },
+  { id: 'L2-21', level: 2, points: 2, bonus: 'green', cost: { black: 1, blue: 2, white: 4 } },
+  { id: 'L2-22', level: 2, points: 2, bonus: 'green', cost: { blue: 5, green: 3 } },
+  { id: 'L2-23', level: 2, points: 2, bonus: 'green', cost: { green: 5 } },
+  { id: 'L2-24', level: 2, points: 3, bonus: 'green', cost: { green: 6 } },
+  { id: 'L2-25', level: 2, points: 1, bonus: 'red', cost: { black: 3, red: 2, white: 2 } },
+  { id: 'L2-26', level: 2, points: 1, bonus: 'red', cost: { black: 3, blue: 3, red: 2 } },
+  { id: 'L2-27', level: 2, points: 2, bonus: 'red', cost: { blue: 4, green: 2, white: 1 } },
+  { id: 'L2-28', level: 2, points: 2, bonus: 'red', cost: { black: 5, white: 3 } },
+  { id: 'L2-29', level: 2, points: 2, bonus: 'red', cost: { black: 5 } },
+  { id: 'L2-30', level: 2, points: 3, bonus: 'red', cost: { red: 6 } },
+  // Level 3 (20 cards)
+  { id: 'L3-01', level: 3, points: 3, bonus: 'black', cost: { blue: 3, green: 5, red: 3, white: 3 } },
+  { id: 'L3-02', level: 3, points: 4, bonus: 'black', cost: { red: 7 } },
+  { id: 'L3-03', level: 3, points: 4, bonus: 'black', cost: { black: 3, green: 3, red: 6 } },
+  { id: 'L3-04', level: 3, points: 5, bonus: 'black', cost: { black: 3, red: 7 } },
+  { id: 'L3-05', level: 3, points: 3, bonus: 'blue', cost: { black: 5, green: 3, red: 3, white: 3 } },
+  { id: 'L3-06', level: 3, points: 4, bonus: 'blue', cost: { white: 7 } },
+  { id: 'L3-07', level: 3, points: 4, bonus: 'blue', cost: { black: 3, blue: 3, white: 6 } },
+  { id: 'L3-08', level: 3, points: 5, bonus: 'blue', cost: { blue: 3, white: 7 } },
+  { id: 'L3-09', level: 3, points: 3, bonus: 'white', cost: { black: 3, blue: 3, green: 3, red: 5 } },
+  { id: 'L3-10', level: 3, points: 4, bonus: 'white', cost: { black: 7 } },
+  { id: 'L3-11', level: 3, points: 4, bonus: 'white', cost: { black: 6, red: 3, white: 3 } },
+  { id: 'L3-12', level: 3, points: 5, bonus: 'white', cost: { black: 7, white: 3 } },
+  { id: 'L3-13', level: 3, points: 3, bonus: 'green', cost: { black: 3, blue: 3, red: 3, white: 5 } },
+  { id: 'L3-14', level: 3, points: 4, bonus: 'green', cost: { blue: 7 } },
+  { id: 'L3-15', level: 3, points: 4, bonus: 'green', cost: { blue: 6, green: 3, white: 3 } },
+  { id: 'L3-16', level: 3, points: 5, bonus: 'green', cost: { blue: 7, green: 3 } },
+  { id: 'L3-17', level: 3, points: 3, bonus: 'red', cost: { black: 3, blue: 5, green: 3, white: 3 } },
+  { id: 'L3-18', level: 3, points: 4, bonus: 'red', cost: { green: 7 } },
+  { id: 'L3-19', level: 3, points: 4, bonus: 'red', cost: { blue: 3, green: 6, red: 3 } },
+  { id: 'L3-20', level: 3, points: 5, bonus: 'red', cost: { green: 7, red: 3 } },
+]
+
+export const CARDS_BY_LEVEL: Record<1 | 2 | 3, CardDef[]> = {
+  1: CARDS.filter((c) => c.level === 1),
+  2: CARDS.filter((c) => c.level === 2),
+  3: CARDS.filter((c) => c.level === 3),
+}
+
+export const CARDS_BY_ID: Record<string, CardDef> = Object.fromEntries(CARDS.map((c) => [c.id, c]))

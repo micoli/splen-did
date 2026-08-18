@@ -1,0 +1,57 @@
+.gem-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.gem-icon--small {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+
+.gem-icon--medium {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+
+.gem-icon--large {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.gem-icon--white {
+  background: var(--gem-white);
+  color: #333;
+  text-shadow: none;
+}
+
+.gem-icon--blue {
+  background: var(--gem-blue);
+}
+
+.gem-icon--green {
+  background: var(--gem-green);
+}
+
+.gem-icon--red {
+  background: var(--gem-red);
+}
+
+.gem-icon--black {
+  background: var(--gem-black);
+}
+
+.gem-icon--gold {
+  background: var(--gem-gold);
+  color: #4a3800;
+  text-shadow: none;
+}
