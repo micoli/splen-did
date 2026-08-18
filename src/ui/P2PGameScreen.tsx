@@ -26,12 +26,13 @@ export function P2PGameScreen({ role, handle, hostName, guestName }: P2PGameScre
       : undefined
 
   const localPlayerId = role === 'host' ? HOST_PLAYER_ID : GUEST_PLAYER_ID
-  const { state, dispatch, legalActions, currentPlayerId, lastError, rematch } = useP2PGame({
-    role,
-    handle,
-    localPlayerId,
-    initialState,
-  })
+  const { state, dispatch, legalActions, currentPlayerId, lastError, rematch, restartPhase, proposeRestart, respondRestart } =
+    useP2PGame({
+      role,
+      handle,
+      localPlayerId,
+      initialState,
+    })
 
   useBeforeUnloadWarning()
 
@@ -52,6 +53,10 @@ export function P2PGameScreen({ role, handle, hostName, guestName }: P2PGameScre
       dispatch={dispatch}
       onRematch={rematch}
       localPlayerId={localPlayerId}
+      onProposeRestart={proposeRestart}
+      restartAwaiting={restartPhase === 'awaitingPeer'}
+      restartPrompt={restartPhase === 'peerRequested' ? "L'adversaire propose de redemarrer la partie. Acceptez-vous ?" : undefined}
+      onRespondRestart={respondRestart}
     />
   )
 }

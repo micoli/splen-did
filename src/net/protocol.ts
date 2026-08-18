@@ -6,3 +6,7 @@ export type ProtocolMessage =
   | { type: 'state'; state: GameState }
   | { type: 'error'; message: string }
   | { type: 'rematchRequest' }
+  | { type: 'restartRequest' }
+  | { type: 'restartResponse'; accept: boolean }
+
+export type RestartEvent = { type: 'requested' } | { type: 'accepted' } | { type: 'declined' }

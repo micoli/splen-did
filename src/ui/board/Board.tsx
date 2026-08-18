@@ -9,6 +9,7 @@ import { GameOverScreen } from './GameOverScreen'
 import { NobleClaimBanner } from './NobleClaimBanner'
 import { NobleRow } from './NobleRow'
 import { PlayerPanel } from './PlayerPanel'
+import { RestartPromptModal } from './RestartPromptModal'
 import { TokenBank } from './TokenBank'
 import './board.css'
 
@@ -20,9 +21,25 @@ interface BoardProps {
   dispatch: (action: Action) => void
   onRematch: () => void
   localPlayerId?: string
+  onProposeRestart: () => void
+  restartAwaiting?: boolean
+  restartPrompt?: string
+  onRespondRestart?: (accept: boolean) => void
 }
 
-export function Board({ state, legalActions, currentPlayerId, lastError, dispatch, onRematch, localPlayerId }: BoardProps) {
+export function Board({
+  state,
+  legalActions,
+  currentPlayerId,
+  lastError,
+  dispatch,
+  onRematch,
+  localPlayerId,
+  onProposeRestart,
+  restartAwaiting,
+  restartPrompt,
+  onRespondRestart,
+}: BoardProps) {
   const [mode, setMode] = useState<InteractionMode>('idle')
   const [selectedColors, setSelectedColors] = useState<TokenColor[]>([])
   const [showYourTurnToast, setShowYourTurnToast] = useState(false)
@@ -162,6 +179,13 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
             />
           )}
         </div>
+        {!state.gameOver && (
+          <div className="panel">
+            <button type="button" onClick={onProposeRestart} disabled={restartAwaiting}>
+              {restartAwaiting ? 'En attente de la reponse...' : 'Proposer un redemarrage'}
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="board-side">
@@ -195,6 +219,14 @@ export function Board({ state, legalActions, currentPlayerId, lastError, dispatc
       )}
 
       {state.gameOver && <GameOverScreen state={state} onRematch={onRematch} />}
+
+      {restartPrompt && onRespondRestart && (
+        <RestartPromptModal
+          message={restartPrompt}
+          onAccept={() => onRespondRestart(true)}
+          onDecline={() => onRespondRestart(false)}
+        />
+      )}
 
       {showError && lastError && <div className="error-toast">{lastError}</div>}
 

@@ -25,5 +25,10 @@ export function useGameEngine(initialState: GameState) {
     [state, player.id]
   )
 
-  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError }
+  const resetState = useCallback((next: GameState) => {
+    setState(next)
+    setLastError(null)
+  }, [])
+
+  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError, resetState }
 }
