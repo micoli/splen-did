@@ -10,7 +10,7 @@ export interface PlayedAction {
   purchasedSlot?: { level: CardLevel; index: number }
 }
 
-function findPurchasedSlot(prev: GameState, next: GameState, action: Action): { level: CardLevel; index: number } | undefined {
+function findPurchasedSlot(prev: GameState, action: Action): { level: CardLevel; index: number } | undefined {
   if (action.type !== 'PURCHASE_CARD' || action.source !== 'visible') return undefined
   for (const level of [1, 2, 3] as CardLevel[]) {
     const index = prev.visibleCards[level].indexOf(action.cardId)
@@ -36,7 +36,7 @@ export function useGameEngine(initialState: GameState) {
         return
       }
       setLastError(null)
-      setLastPlayedAction({ action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, next, action) })
+      setLastPlayedAction({ action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, action) })
       setState(next)
     },
     [state, player.id]
