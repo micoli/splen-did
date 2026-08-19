@@ -11,6 +11,7 @@ interface CardRowProps {
   onCardClick?: (cardId: string) => void
   onDeckClick?: () => void
   deckClickable?: boolean
+  highlightedIndex?: number
 }
 
 export function CardRow({
@@ -22,6 +23,7 @@ export function CardRow({
   onCardClick,
   onDeckClick,
   deckClickable,
+  highlightedIndex,
 }: CardRowProps) {
   return (
     <div className={`card-row card-row--level-${level}`}>
@@ -43,6 +45,7 @@ export function CardRow({
               affordable={affordableCardIds ? affordableCardIds.has(cardId) : true}
               purchasable={affordableCardIds?.has(cardId)}
               onClick={() => onCardClick?.(cardId)}
+              highlighted={highlightedIndex === index}
             />
           ) : (
             <div key={`empty-${index}`} className="dev-card" aria-hidden="true" />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { totalTokens } from '../../engine/selectors'
+import { getCardDef, getNobleDef, totalTokens } from '../../engine/selectors'
 import type { Action, CardLevel, GameState, Token, TokenColor } from '../../engine/types'
+import type { PlayedAction } from '../../hooks/useGameEngine'
 import { ActionBar } from './ActionBar'
 import type { InteractionMode } from './ActionBar'
 import { CardGrid } from './CardGrid'
@@ -13,11 +14,39 @@ import { RestartPromptModal } from './RestartPromptModal'
 import { TokenBank } from './TokenBank'
 import './board.css'
 
+const AI_HIGHLIGHT_DURATION_MS = 3200
+
+const TOKEN_COLOR_LABELS: Record<TokenColor, string> = {
+  white: 'blanc',
+  blue: 'bleu',
+  green: 'vert',
+  red: 'rouge',
+  black: 'noir',
+}
+
+function describeAiAction(action: Action, playerName: string): string {
+  switch (action.type) {
+    case 'TAKE_THREE_DIFFERENT':
+      return `${playerName} a pris 3 jetons : ${action.colors.map((c) => TOKEN_COLOR_LABELS[c]).join(', ')}`
+    case 'TAKE_TWO_SAME':
+      return `${playerName} a pris 2 jetons ${TOKEN_COLOR_LABELS[action.color]}`
+    case 'RESERVE_CARD':
+      return `${playerName} a reserve une carte`
+    case 'PURCHASE_CARD':
+      return `${playerName} a achete une carte niveau ${getCardDef(action.cardId).level} (${getCardDef(action.cardId).points} pts)`
+    case 'CLAIM_NOBLE':
+      return `${playerName} a courtise un noble (${getNobleDef(action.nobleId).points} pts)`
+    case 'DISCARD_TOKENS':
+      return `${playerName} a defausse des jetons`
+  }
+}
+
 interface BoardProps {
   state: GameState
   legalActions: Action[]
   currentPlayerId: string
   lastError: string | null
+  lastPlayedAction?: PlayedAction | null
   dispatch: (action: Action) => void
   onRematch: () => void
   onExit: () => void
@@ -33,6 +62,7 @@ export function Board({
   legalActions,
   currentPlayerId,
   lastError,
+  lastPlayedAction,
   dispatch,
   onRematch,
   onExit,
@@ -70,6 +100,27 @@ export function Board({
     const timer = setTimeout(() => setShowError(false), 5000)
     return () => clearTimeout(timer)
   }, [lastError])
+
+  const [aiAction, setAiAction] = useState<{
+    message: string
+    colors?: TokenColor[]
+    purchasedSlot?: { level: CardLevel; index: number }
+  } | null>(null)
+
+  useEffect(() => {
+    if (!lastPlayedAction) return
+    const actor = state.players.find((p) => p.id === lastPlayedAction.playerId)
+    if (!actor?.isAI) return
+    const { action, purchasedSlot } = lastPlayedAction
+    setAiAction({
+      message: describeAiAction(action, actor.name),
+      colors: action.type === 'TAKE_THREE_DIFFERENT' ? action.colors : action.type === 'TAKE_TWO_SAME' ? [action.color] : undefined,
+      purchasedSlot,
+    })
+    const timer = setTimeout(() => setAiAction(null), AI_HIGHLIGHT_DURATION_MS)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastPlayedAction])
 
   const take3Actions = legalActions.filter(
     (a): a is Extract<Action, { type: 'TAKE_THREE_DIFFERENT' }> => a.type === 'TAKE_THREE_DIFFERENT'
@@ -152,6 +203,7 @@ export function Board({
               }
               selectedColors={mode === 'take3' ? selectedColors : undefined}
               onSelectColor={onSelectColor}
+              highlightedColors={aiAction?.colors}
           />
         </div>
         <CardGrid
@@ -160,6 +212,7 @@ export function Board({
           clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
           affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
           onCardClick={onCardClick}
+          highlightedSlot={aiAction?.purchasedSlot}
           clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
           onDeckClick={onDeckClick}
         />
@@ -235,6 +288,8 @@ export function Board({
       )}
 
       {showError && lastError && <div className="error-toast">{lastError}</div>}
+
+      {aiAction && <div className="ai-action-toast">{aiAction.message}</div>}
 
       {showYourTurnToast && <div className="your-turn-toast">C'est a toi !</div>}
     </div>

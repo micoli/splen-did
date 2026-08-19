@@ -2,11 +2,27 @@ import { useCallback, useMemo, useState } from 'react'
 import { enumerateLegalActions } from '../engine/legalActions'
 import { gameReducer } from '../engine/reducer'
 import { currentPlayer } from '../engine/selectors'
-import type { Action, GameState } from '../engine/types'
+import type { Action, CardLevel, GameState } from '../engine/types'
+
+export interface PlayedAction {
+  action: Action
+  playerId: string
+  purchasedSlot?: { level: CardLevel; index: number }
+}
+
+function findPurchasedSlot(prev: GameState, next: GameState, action: Action): { level: CardLevel; index: number } | undefined {
+  if (action.type !== 'PURCHASE_CARD' || action.source !== 'visible') return undefined
+  for (const level of [1, 2, 3] as CardLevel[]) {
+    const index = prev.visibleCards[level].indexOf(action.cardId)
+    if (index !== -1) return { level, index }
+  }
+  return undefined
+}
 
 export function useGameEngine(initialState: GameState) {
   const [state, setState] = useState(initialState)
   const [lastError, setLastError] = useState<string | null>(null)
+  const [lastPlayedAction, setLastPlayedAction] = useState<PlayedAction | null>(null)
 
   const player = currentPlayer(state)
 
@@ -20,6 +36,7 @@ export function useGameEngine(initialState: GameState) {
         return
       }
       setLastError(null)
+      setLastPlayedAction({ action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, next, action) })
       setState(next)
     },
     [state, player.id]
@@ -28,7 +45,8 @@ export function useGameEngine(initialState: GameState) {
   const resetState = useCallback((next: GameState) => {
     setState(next)
     setLastError(null)
+    setLastPlayedAction(null)
   }, [])
 
-  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError, resetState }
+  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError, lastPlayedAction, resetState }
 }

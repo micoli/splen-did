@@ -9,6 +9,7 @@ interface CardGridProps {
   onCardClick?: (cardId: string) => void
   clickableDeckLevels?: Set<CardLevel>
   onDeckClick?: (level: CardLevel) => void
+  highlightedSlot?: { level: CardLevel; index: number }
 }
 
 export function CardGrid({
@@ -19,6 +20,7 @@ export function CardGrid({
   onCardClick,
   clickableDeckLevels,
   onDeckClick,
+  highlightedSlot,
 }: CardGridProps) {
   return (
     <div className="card-grid board-panel">
@@ -33,6 +35,7 @@ export function CardGrid({
           onCardClick={onCardClick}
           deckClickable={clickableDeckLevels?.has(level)}
           onDeckClick={() => onDeckClick?.(level)}
+          highlightedIndex={highlightedSlot?.level === level ? highlightedSlot.index : undefined}
         />
       ))}
     </div>

@@ -7,9 +7,10 @@ interface TokenBankProps {
   selectableColors?: TokenColor[]
   selectedColors?: TokenColor[]
   onSelectColor?: (color: TokenColor) => void
+  highlightedColors?: TokenColor[]
 }
 
-export function TokenBank({ bank, selectableColors, selectedColors, onSelectColor }: TokenBankProps) {
+export function TokenBank({ bank, selectableColors, selectedColors, onSelectColor, highlightedColors }: TokenBankProps) {
   return (
     <div className="token-bank">
       {TOKEN_COLORS.map((color) => (
@@ -18,6 +19,7 @@ export function TokenBank({ bank, selectableColors, selectedColors, onSelectColo
           color={color}
           count={bank[color]}
           selected={selectedColors?.includes(color)}
+          highlighted={highlightedColors?.includes(color)}
           onClick={selectableColors?.includes(color) ? () => onSelectColor?.(color) : undefined}
         />
       ))}

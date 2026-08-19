@@ -21,7 +21,7 @@ type RestartState = { phase: 'idle' } | RestartConfirming
 
 export function GameScreen({ players, onRematch, onExit }: GameScreenProps) {
   const initialState = useMemo(() => createInitialState({ players }), [players])
-  const { state, dispatch, legalActions, currentPlayerId, lastError, resetState } = useGameEngine(initialState)
+  const { state, dispatch, legalActions, currentPlayerId, lastError, lastPlayedAction, resetState } = useGameEngine(initialState)
   useAIPlayer(state, dispatch)
   useBeforeUnloadWarning()
 
@@ -57,6 +57,7 @@ export function GameScreen({ players, onRematch, onExit }: GameScreenProps) {
       legalActions={legalActions}
       currentPlayerId={currentPlayerId}
       lastError={lastError}
+      lastPlayedAction={lastPlayedAction}
       dispatch={dispatch}
       onRematch={onRematch}
       onExit={onExit}
