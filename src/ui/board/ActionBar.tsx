@@ -45,7 +45,7 @@ export function ActionBar({
           {compact ? '+2 💎' : 'Prendre 2 jetons'}
         </button>
         <button type="button" className={mode === 'reserve' ? 'active' : ''} disabled={!canReserve} onClick={() => toggle('reserve')}>
-          {compact ? '✋' : 'Réserver une carte'}
+          {compact ? '🔖' : 'Réserver une carte'}
         </button>
         <button type="button" className={mode === 'purchase' ? 'active' : ''} disabled={!canPurchase} onClick={() => toggle('purchase')}>
           {compact ? '🛒' : 'Acheter une carte'}
