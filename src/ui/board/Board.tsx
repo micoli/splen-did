@@ -199,6 +199,11 @@ export function Board({
 
   const actionBarPanel = (
     <div className="panel board-panel action-bar-panel">
+      {isStickyActionBar && (
+        <span className="turn-star" aria-label={isMyTurn ? 'Ton tour' : 'Tour adverse'}>
+          {isMyTurn ? '★' : '☆'}
+        </span>
+      )}
       {isAITurn ? (
         <p>L'IA reflechit...</p>
       ) : (
