@@ -423,7 +423,7 @@
   text-align: center;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .board {
     grid-template-columns: 1fr;
     padding: 12px;

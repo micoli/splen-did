@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getCardDef, getNobleDef, totalTokens } from '../../engine/selectors'
 import type { Action, CardLevel, GameState, Token, TokenColor } from '../../engine/types'
 import type { PlayedAction } from '../../hooks/useGameEngine'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { ActionBar } from './ActionBar'
 import type { InteractionMode } from './ActionBar'
 import { CardGrid } from './CardGrid'
@@ -76,6 +77,7 @@ export function Board({
   const [selectedColors, setSelectedColors] = useState<TokenColor[]>([])
   const [selectedTake2Color, setSelectedTake2Color] = useState<TokenColor | undefined>(undefined)
   const [showYourTurnToast, setShowYourTurnToast] = useState(false)
+  const isTwoColumnLayout = useMediaQuery('(min-width: 1024px)')
 
   useEffect(() => {
     setMode('idle')
@@ -194,6 +196,29 @@ export function Board({
     }
   }
 
+  const actionBarPanel = (
+    <div className="panel board-panel">
+      {isAITurn ? (
+        <p>L'IA reflechit...</p>
+      ) : (
+        <ActionBar
+          mode={mode}
+          onSetMode={setMode}
+          canTake3={take3Actions.length > 0}
+          canTake2={take2Actions.length > 0}
+          canReserve={reserveActions.length > 0}
+          canPurchase={purchaseActions.length > 0}
+          take3Ready={selectedColors.length === take3RequiredCount}
+          take3RequiredCount={take3RequiredCount}
+          take3SelectedCount={selectedColors.length}
+          onConfirmTake3={onConfirmTake3}
+          take2Ready={selectedTake2Color !== undefined}
+          onConfirmTake2={onConfirmTake2}
+        />
+      )}
+    </div>
+  )
+
   const discardingPlayer = state.turnPhase === 'discard' ? state.players.find((p) => p.id === currentPlayerId) : undefined
 
   function handleExit() {
@@ -234,29 +259,11 @@ export function Board({
           clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
           onDeckClick={onDeckClick}
         />
-        <div className="panel board-panel">
-          {isAITurn ? (
-            <p>L'IA reflechit...</p>
-          ) : (
-            <ActionBar
-              mode={mode}
-              onSetMode={setMode}
-              canTake3={take3Actions.length > 0}
-              canTake2={take2Actions.length > 0}
-              canReserve={reserveActions.length > 0}
-              canPurchase={purchaseActions.length > 0}
-              take3Ready={selectedColors.length === take3RequiredCount}
-              take3RequiredCount={take3RequiredCount}
-              take3SelectedCount={selectedColors.length}
-              onConfirmTake3={onConfirmTake3}
-              take2Ready={selectedTake2Color !== undefined}
-              onConfirmTake2={onConfirmTake2}
-            />
-          )}
-        </div>
+        {!isTwoColumnLayout && actionBarPanel}
       </div>
 
       <div className="board-side">
+        {isTwoColumnLayout && actionBarPanel}
         {state.players.map((player) => (
           <PlayerPanel
             key={player.id}
