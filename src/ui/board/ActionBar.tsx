@@ -11,6 +11,8 @@ interface ActionBarProps {
   take3RequiredCount: number
   take3SelectedCount: number
   onConfirmTake3: () => void
+  take2Ready: boolean
+  onConfirmTake2: () => void
 }
 
 export function ActionBar({
@@ -24,6 +26,8 @@ export function ActionBar({
   take3RequiredCount,
   take3SelectedCount,
   onConfirmTake3,
+  take2Ready,
+  onConfirmTake2,
 }: ActionBarProps) {
   function toggle(next: InteractionMode) {
     onSetMode(mode === next ? 'idle' : next)
@@ -49,6 +53,13 @@ export function ActionBar({
         <div className="action-bar__confirm">
           <button type="button" disabled={!take3Ready} onClick={onConfirmTake3}>
             Confirmer ({take3SelectedCount}/{take3RequiredCount})
+          </button>
+        </div>
+      )}
+      {mode === 'take2' && (
+        <div className="action-bar__confirm">
+          <button type="button" disabled={!take2Ready} onClick={onConfirmTake2}>
+            Confirmer
           </button>
         </div>
       )}

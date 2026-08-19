@@ -74,11 +74,13 @@ export function Board({
 }: BoardProps) {
   const [mode, setMode] = useState<InteractionMode>('idle')
   const [selectedColors, setSelectedColors] = useState<TokenColor[]>([])
+  const [selectedTake2Color, setSelectedTake2Color] = useState<TokenColor | undefined>(undefined)
   const [showYourTurnToast, setShowYourTurnToast] = useState(false)
 
   useEffect(() => {
     setMode('idle')
     setSelectedColors([])
+    setSelectedTake2Color(undefined)
   }, [currentPlayerId, state.turnPhase])
 
   const currentPlayer = state.players.find((p) => p.id === currentPlayerId)
@@ -144,7 +146,7 @@ export function Board({
 
   function onSelectColor(color: TokenColor) {
     if (mode === 'take2') {
-      dispatch({ type: 'TAKE_TWO_SAME', color })
+      setSelectedTake2Color((prev) => (prev === color ? undefined : color))
       return
     }
     if (mode === 'take3') {
@@ -158,6 +160,11 @@ export function Board({
 
   function onConfirmTake3() {
     dispatch({ type: 'TAKE_THREE_DIFFERENT', colors: selectedColors })
+  }
+
+  function onConfirmTake2() {
+    if (!selectedTake2Color) return
+    dispatch({ type: 'TAKE_TWO_SAME', color: selectedTake2Color })
   }
 
   function onCardClick(cardId: string) {
@@ -201,7 +208,9 @@ export function Board({
                         ? [...take2Colors]
                         : undefined
               }
-              selectedColors={mode === 'take3' ? selectedColors : undefined}
+              selectedColors={
+                mode === 'take3' ? selectedColors : mode === 'take2' && selectedTake2Color ? [selectedTake2Color] : undefined
+              }
               onSelectColor={onSelectColor}
               highlightedColors={aiAction?.colors}
           />
@@ -231,6 +240,8 @@ export function Board({
               take3RequiredCount={take3RequiredCount}
               take3SelectedCount={selectedColors.length}
               onConfirmTake3={onConfirmTake3}
+              take2Ready={selectedTake2Color !== undefined}
+              onConfirmTake2={onConfirmTake2}
             />
           )}
         </div>
