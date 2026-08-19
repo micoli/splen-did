@@ -106,7 +106,7 @@ export function Board({
   const [aiAction, setAiAction] = useState<{
     message: string
     colors?: TokenColor[]
-    purchasedSlot?: { level: CardLevel; index: number }
+    purchasedSlot?: { level: CardLevel; index: number; cardId: string }
   } | null>(null)
 
   useEffect(() => {
@@ -117,12 +117,21 @@ export function Board({
     setAiAction({
       message: describeAiAction(action, actor.name),
       colors: action.type === 'TAKE_THREE_DIFFERENT' ? action.colors : action.type === 'TAKE_TWO_SAME' ? [action.color] : undefined,
-      purchasedSlot,
+      purchasedSlot: purchasedSlot && action.type === 'PURCHASE_CARD' ? { ...purchasedSlot, cardId: action.cardId } : undefined,
     })
     const timer = setTimeout(() => setAiAction(null), AI_HIGHLIGHT_DURATION_MS)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastPlayedAction])
+
+  const displayVisibleCards = aiAction?.purchasedSlot
+    ? {
+        ...state.visibleCards,
+        [aiAction.purchasedSlot.level]: state.visibleCards[aiAction.purchasedSlot.level].map((cardId, index) =>
+          index === aiAction.purchasedSlot!.index ? aiAction.purchasedSlot!.cardId : cardId
+        ),
+      }
+    : state.visibleCards
 
   const take3Actions = legalActions.filter(
     (a): a is Extract<Action, { type: 'TAKE_THREE_DIFFERENT' }> => a.type === 'TAKE_THREE_DIFFERENT'
@@ -216,7 +225,7 @@ export function Board({
           />
         </div>
         <CardGrid
-          visibleCards={state.visibleCards}
+          visibleCards={displayVisibleCards}
           deckCounts={{ 1: state.decks[1].length, 2: state.decks[2].length, 3: state.decks[3].length }}
           clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
           affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
