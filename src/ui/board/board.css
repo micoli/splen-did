@@ -66,14 +66,15 @@
 .noble-row {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
 }
 
 .noble-tile {
-  min-width: 88px;
+  flex: 1 1 0;
+  min-width: 0;
   height: 64px;
-  padding: 0 8px;
+  padding: 0 4px;
   border-radius: 8px;
   border: 2px solid var(--border);
   background: linear-gradient(135deg, #e9d9a8, #c9ac5c);
@@ -94,6 +95,8 @@
 
 .noble-tile__requirement {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2px;
 }
 
@@ -432,9 +435,8 @@
 
 @media (max-width: 640px) {
   .noble-tile {
-    min-width: 70px;
     height: 52px;
-    padding: 0 6px;
+    padding: 0 4px;
     font-size: 10px;
     gap: 2px;
   }
