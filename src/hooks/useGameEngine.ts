@@ -23,6 +23,7 @@ export function useGameEngine(initialState: GameState) {
   const [state, setState] = useState(initialState)
   const [lastError, setLastError] = useState<string | null>(null)
   const [lastPlayedAction, setLastPlayedAction] = useState<PlayedAction | null>(null)
+  const [actionLog, setActionLog] = useState<PlayedAction[]>([])
 
   const player = currentPlayer(state)
 
@@ -36,7 +37,9 @@ export function useGameEngine(initialState: GameState) {
         return
       }
       setLastError(null)
-      setLastPlayedAction({ action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, action) })
+      const played = { action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, action) }
+      setLastPlayedAction(played)
+      setActionLog((prev) => [...prev, played])
       setState(next)
     },
     [state, player.id]
@@ -46,7 +49,8 @@ export function useGameEngine(initialState: GameState) {
     setState(next)
     setLastError(null)
     setLastPlayedAction(null)
+    setActionLog([])
   }, [])
 
-  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError, lastPlayedAction, resetState }
+  return { state, dispatch, legalActions, currentPlayerId: player.id, lastError, lastPlayedAction, actionLog, resetState }
 }

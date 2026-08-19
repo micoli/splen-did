@@ -25,7 +25,7 @@ const TOKEN_COLOR_LABELS: Record<TokenColor, string> = {
   black: 'noir',
 }
 
-function describeAiAction(action: Action, playerName: string): string {
+function describeAction(action: Action, playerName: string): string {
   switch (action.type) {
     case 'TAKE_THREE_DIFFERENT':
       return `${playerName} a pris 3 jetons : ${action.colors.map((c) => TOKEN_COLOR_LABELS[c]).join(', ')}`
@@ -48,6 +48,7 @@ interface BoardProps {
   currentPlayerId: string
   lastError: string | null
   lastPlayedAction?: PlayedAction | null
+  actionLog?: PlayedAction[]
   dispatch: (action: Action) => void
   onRematch: () => void
   onExit: () => void
@@ -64,6 +65,7 @@ export function Board({
   currentPlayerId,
   lastError,
   lastPlayedAction,
+  actionLog,
   dispatch,
   onRematch,
   onExit,
@@ -77,8 +79,10 @@ export function Board({
   const [selectedColors, setSelectedColors] = useState<TokenColor[]>([])
   const [selectedTake2Color, setSelectedTake2Color] = useState<TokenColor | undefined>(undefined)
   const [showYourTurnToast, setShowYourTurnToast] = useState(false)
-  const isTwoColumnLayout = useMediaQuery('(min-width: 1024px)')
-  const isStickyActionBar = useMediaQuery('(max-width: 640px)')
+  const isStickyActionBar = useMediaQuery('(max-width: 539px)')
+  const isSidebarLayout = !isStickyActionBar
+  const isCompactActionBar = useMediaQuery('(max-width: 640px)')
+  const isWideLayout = useMediaQuery('(min-width: 641px)')
 
   useEffect(() => {
     setMode('idle')
@@ -118,7 +122,7 @@ export function Board({
     if (!actor?.isAI) return
     const { action, purchasedSlot } = lastPlayedAction
     setAiAction({
-      message: describeAiAction(action, actor.name),
+      message: describeAction(action, actor.name),
       colors: action.type === 'TAKE_THREE_DIFFERENT' ? action.colors : action.type === 'TAKE_TWO_SAME' ? [action.color] : undefined,
       purchasedSlot: purchasedSlot && action.type === 'PURCHASE_CARD' ? { ...purchasedSlot, cardId: action.cardId } : undefined,
     })
@@ -220,7 +224,7 @@ export function Board({
           onConfirmTake3={onConfirmTake3}
           take2Ready={selectedTake2Color !== undefined}
           onConfirmTake2={onConfirmTake2}
-          compact={isStickyActionBar}
+          compact={isCompactActionBar}
         />
       )}
     </div>
@@ -235,7 +239,6 @@ export function Board({
   return (
     <div className="board">
       <div className="board-main">
-        <div className="turn-banner">Au tour de {currentPlayer?.name}</div>
         <div className="panel board-panel">
           <NobleRow nobleIds={state.nobles} />
         </div>
@@ -266,11 +269,14 @@ export function Board({
           clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
           onDeckClick={onDeckClick}
         />
-        {!isTwoColumnLayout && actionBarPanel}
+        {isStickyActionBar && actionBarPanel}
       </div>
 
       <div className="board-side">
-        {isTwoColumnLayout && actionBarPanel}
+        {isSidebarLayout && (
+          <div className="turn-banner">{isAITurn ? "L'IA reflechit..." : `Au tour de ${currentPlayer?.name}`}</div>
+        )}
+        {isSidebarLayout && actionBarPanel}
         {state.players.map((player) => (
           <PlayerPanel
             key={player.id}
@@ -284,6 +290,23 @@ export function Board({
           />
         ))}
       </div>
+
+      {isWideLayout && actionLog && (
+        <div className="board-log panel">
+          <h3>Historique</h3>
+          <ul className="board-log__list">
+            {actionLog
+              .map((entry, index) => ({ entry, index }))
+              .reverse()
+              .map(({ entry, index }) => {
+                const actor = state.players.find((p) => p.id === entry.playerId)
+                return (
+                  <li key={index}>{describeAction(entry.action, actor?.name ?? '?')}</li>
+                )
+              })}
+          </ul>
+        </div>
+      )}
 
       <div className="board-footer panel">
         {!state.gameOver && (
