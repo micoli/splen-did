@@ -23,7 +23,7 @@ export function DevelopmentCard({ card, hidden, affordable = true, clickable, pu
   return (
     <div className={classes.join(' ')} onClick={clickable ? onClick : undefined} role={clickable ? 'button' : undefined}>
       <div className="dev-card__top">
-        <GemIcon color={card.bonus} size="medium" />
+        <GemIcon color={card.bonus} size="large" />
         {card.points > 0 && <strong>{card.points}</strong>}
       </div>
       <div className="dev-card__cost">

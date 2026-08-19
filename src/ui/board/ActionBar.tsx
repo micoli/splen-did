@@ -33,13 +33,13 @@ export function ActionBar({
     <div>
       <div className="action-bar">
         <button type="button" className={mode === 'take3' ? 'active' : ''} disabled={!canTake3} onClick={() => toggle('take3')}>
-          Prendre 3 jetons differents
+          Prendre 3 jetons
         </button>
         <button type="button" className={mode === 'take2' ? 'active' : ''} disabled={!canTake2} onClick={() => toggle('take2')}>
-          Prendre 2 jetons identiques
+          Prendre 2 jetons
         </button>
         <button type="button" className={mode === 'reserve' ? 'active' : ''} disabled={!canReserve} onClick={() => toggle('reserve')}>
-          Reserver une carte
+          Réserver une carte
         </button>
         <button type="button" className={mode === 'purchase' ? 'active' : ''} disabled={!canPurchase} onClick={() => toggle('purchase')}>
           Acheter une carte

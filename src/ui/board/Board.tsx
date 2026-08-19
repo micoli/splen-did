@@ -137,37 +137,33 @@ export function Board({
     <div className="board">
       <div className="board-main">
         <div className="turn-banner">Au tour de {currentPlayer?.name}</div>
-        <div className="panel">
-          <NobleRow
-            nobleIds={state.nobles}
-            deckCounts={{ 1: state.decks[1].length, 2: state.decks[2].length, 3: state.decks[3].length }}
-          />
+        <div className="panel board-panel">
+          <NobleRow nobleIds={state.nobles} />
         </div>
-        <div className="panel">
-          <CardGrid
-            visibleCards={state.visibleCards}
-            clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
-            affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
-            onCardClick={onCardClick}
-            clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
-            onDeckClick={onDeckClick}
-          />
-        </div>
-        <div className="panel">
+        <div className="panel board-panel">
           <TokenBank
-            bank={state.bank}
-            selectableColors={
-              mode === 'take3'
-                ? [...take3SelectableColors]
-                : mode === 'take2'
-                  ? [...take2Colors]
-                  : undefined
-            }
-            selectedColors={mode === 'take3' ? selectedColors : undefined}
-            onSelectColor={onSelectColor}
+              bank={state.bank}
+              selectableColors={
+                mode === 'take3'
+                    ? [...take3SelectableColors]
+                    : mode === 'take2'
+                        ? [...take2Colors]
+                        : undefined
+              }
+              selectedColors={mode === 'take3' ? selectedColors : undefined}
+              onSelectColor={onSelectColor}
           />
         </div>
-        <div className="panel">
+        <CardGrid
+          visibleCards={state.visibleCards}
+          deckCounts={{ 1: state.decks[1].length, 2: state.decks[2].length, 3: state.decks[3].length }}
+          clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
+          affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
+          onCardClick={onCardClick}
+          clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
+          onDeckClick={onDeckClick}
+        />
+        <div className="panel board-panel">
           {isAITurn ? (
             <p>L'IA reflechit...</p>
           ) : (

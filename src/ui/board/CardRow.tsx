@@ -5,6 +5,7 @@ import { DevelopmentCard } from './DevelopmentCard'
 interface CardRowProps {
   level: CardLevel
   visibleCardIds: (string | null)[]
+  deckCount?: number
   clickableCardIds?: Set<string>
   affordableCardIds?: Set<string>
   onCardClick?: (cardId: string) => void
@@ -15,6 +16,7 @@ interface CardRowProps {
 export function CardRow({
   level,
   visibleCardIds,
+  deckCount,
   clickableCardIds,
   affordableCardIds,
   onCardClick,
@@ -23,6 +25,9 @@ export function CardRow({
 }: CardRowProps) {
   return (
     <div className={`card-row card-row--level-${level}`}>
+      {deckCount !== undefined && (
+        <span className={`card-row__deck-count card-row__deck-count--level-${level}`}>{deckCount}</span>
+      )}
       {deckClickable && (
         <button type="button" className="card-row__deck-reserve" onClick={onDeckClick}>
           Piocher
