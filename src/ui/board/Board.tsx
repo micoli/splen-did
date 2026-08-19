@@ -78,6 +78,7 @@ export function Board({
   const [selectedTake2Color, setSelectedTake2Color] = useState<TokenColor | undefined>(undefined)
   const [showYourTurnToast, setShowYourTurnToast] = useState(false)
   const isTwoColumnLayout = useMediaQuery('(min-width: 1024px)')
+  const isStickyActionBar = useMediaQuery('(max-width: 640px)')
 
   useEffect(() => {
     setMode('idle')
@@ -197,7 +198,7 @@ export function Board({
   }
 
   const actionBarPanel = (
-    <div className="panel board-panel">
+    <div className="panel board-panel action-bar-panel">
       {isAITurn ? (
         <p>L'IA reflechit...</p>
       ) : (
@@ -214,6 +215,7 @@ export function Board({
           onConfirmTake3={onConfirmTake3}
           take2Ready={selectedTake2Color !== undefined}
           onConfirmTake2={onConfirmTake2}
+          compact={isStickyActionBar}
         />
       )}
     </div>
