@@ -5,6 +5,7 @@ import { encodeGameLink } from '../engine/gameLink'
 import { useAIPlayer } from '../hooks/useAIPlayer'
 import { useBeforeUnloadWarning } from '../hooks/useBeforeUnloadWarning'
 import { useGameEngine } from '../hooks/useGameEngine'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Board } from './board/Board'
 
 interface GameScreenProps {
@@ -26,6 +27,7 @@ function randomSeed(): number {
 }
 
 export function GameScreen({ players, initialSeed, onRematch, onExit }: GameScreenProps) {
+  const { t } = useLanguage()
   const isSolo = players.some((p) => p.isAI)
   const [seed, setSeed] = useState(() => initialSeed ?? randomSeed())
   const initialState = useMemo(() => createInitialState({ players, rng: createSeededRng(seed) }), [players, seed])
@@ -78,7 +80,7 @@ export function GameScreen({ players, initialSeed, onRematch, onExit }: GameScre
       onRematch={onRematch}
       onExit={onExit}
       onProposeRestart={onProposeRestart}
-      restartPrompt={pendingPlayer ? `${pendingPlayer.name}, acceptez-vous de redemarrer la partie ?` : undefined}
+      restartPrompt={pendingPlayer ? t.restartPrompt(pendingPlayer.name) : undefined}
       onRespondRestart={onRespondRestart}
     />
   )

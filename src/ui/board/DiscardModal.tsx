@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { GemIcon } from '../shared/GemIcon'
 import { TOKEN_COLORS } from '../../engine/types'
 import type { PlayerState, Token } from '../../engine/types'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 interface DiscardModalProps {
   player: PlayerState
@@ -10,6 +11,7 @@ interface DiscardModalProps {
 }
 
 export function DiscardModal({ player, excess, onDiscard }: DiscardModalProps) {
+  const { t } = useLanguage()
   const [picked, setPicked] = useState<Partial<Record<Token, number>>>({})
 
   const pickedTotal = Object.values(picked).reduce((sum, n) => sum + (n ?? 0), 0)
@@ -28,8 +30,8 @@ export function DiscardModal({ player, excess, onDiscard }: DiscardModalProps) {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Defausser {excess} jeton(s)</h3>
-        <p>Vous avez plus de 10 jetons, choisissez lesquels defausser.</p>
+        <h3>{t.discardTitle(excess)}</h3>
+        <p>{t.discardDescription}</p>
         {tokens
           .filter((token) => player.tokens[token] > 0)
           .map((token) => (
@@ -47,7 +49,7 @@ export function DiscardModal({ player, excess, onDiscard }: DiscardModalProps) {
             </div>
           ))}
         <button type="button" className="btn-primary" disabled={pickedTotal !== excess} onClick={() => onDiscard(picked)}>
-          Confirmer la defausse
+          {t.discardConfirm}
         </button>
       </div>
     </div>

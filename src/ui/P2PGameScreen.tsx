@@ -1,6 +1,7 @@
 import { createInitialState } from '../engine/setup'
 import { useBeforeUnloadWarning } from '../hooks/useBeforeUnloadWarning'
 import { useP2PGame } from '../hooks/useP2PGame'
+import { useLanguage } from '../i18n/LanguageContext'
 import type { PeerHandle } from '../net/webrtc'
 import { Board } from './board/Board'
 
@@ -16,6 +17,7 @@ interface P2PGameScreenProps {
 }
 
 export function P2PGameScreen({ role, handle, hostName, guestName, onExit }: P2PGameScreenProps) {
+  const { t } = useLanguage()
   const initialState =
     role === 'host'
       ? createInitialState({
@@ -40,7 +42,7 @@ export function P2PGameScreen({ role, handle, hostName, guestName, onExit }: P2P
   if (!state) {
     return (
       <div style={{ maxWidth: 480, margin: '40px auto' }}>
-        <p>En attente de la partie...</p>
+        <p>{t.waitingForGame}</p>
       </div>
     )
   }
@@ -57,7 +59,7 @@ export function P2PGameScreen({ role, handle, hostName, guestName, onExit }: P2P
       localPlayerId={localPlayerId}
       onProposeRestart={proposeRestart}
       restartAwaiting={restartPhase === 'awaitingPeer'}
-      restartPrompt={restartPhase === 'peerRequested' ? "L'adversaire propose de redemarrer la partie. Acceptez-vous ?" : undefined}
+      restartPrompt={restartPhase === 'peerRequested' ? t.restartPeerRequested : undefined}
       onRespondRestart={respondRestart}
     />
   )

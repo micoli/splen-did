@@ -18,6 +18,12 @@
   max-width: 480px;
 }
 
+.setup-screen__lang {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
 .setup-screen__header {
   text-align: center;
   margin-bottom: 24px;

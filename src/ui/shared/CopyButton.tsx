@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 interface CopyButtonProps {
   text: string
 }
 
 export function CopyButton({ text }: CopyButtonProps) {
+  const { t } = useLanguage()
   const [copied, setCopied] = useState(false)
 
   async function handleCopy() {
@@ -15,7 +17,7 @@ export function CopyButton({ text }: CopyButtonProps) {
 
   return (
     <button type="button" onClick={handleCopy} disabled={!text}>
-      {copied ? 'Copie !' : 'Copier'}
+      {copied ? t.copied : t.copy}
     </button>
   )
 }

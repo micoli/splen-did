@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 const NAMES_STORAGE_KEY = 'Splen-did:hotseatNames'
 
@@ -17,9 +18,10 @@ interface HotseatSetupFormProps {
 }
 
 export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
+  const { t } = useLanguage()
   const [names, setNames] = useState(() => {
     const stored = loadStoredNames()
-    return [stored[0] || 'Joueur 1', stored[1] || 'Joueur 2']
+    return [stored[0] || t.playerPlaceholder(1), stored[1] || t.playerPlaceholder(2)]
   })
 
   function updateNames(next: string[]) {
@@ -30,22 +32,26 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
   function setPlayerCount(count: number) {
     const stored = loadStoredNames()
     const next = [...names]
-    while (next.length < count) next.push(stored[next.length] || `Joueur ${next.length + 1}`)
+    while (next.length < count) next.push(stored[next.length] || t.playerPlaceholder(next.length + 1))
     updateNames(next.slice(0, count))
   }
 
   function handleSubmit() {
-    const players: PlayerConfig[] = names.map((name, i) => ({ id: `p${i + 1}`, name: name.trim() || `Joueur ${i + 1}`, isAI: false }))
+    const players: PlayerConfig[] = names.map((name, i) => ({
+      id: `p${i + 1}`,
+      name: name.trim() || t.playerPlaceholder(i + 1),
+      isAI: false,
+    }))
     onStart(players)
   }
 
   return (
     <div className="setup-panel">
-      <h3>Partie locale (pass-and-play)</h3>
+      <h3>{t.hotseatTitle}</h3>
       <div className="setup-panel__toggle-row">
         {[2, 3, 4].map((count) => (
           <button key={count} type="button" className={names.length === count ? 'active' : ''} onClick={() => setPlayerCount(count)}>
-            {count} joueurs
+            {t.playerCount(count)}
           </button>
         ))}
       </div>
@@ -54,12 +60,12 @@ export function HotseatSetupForm({ onStart }: HotseatSetupFormProps) {
           <input
             value={name}
             onChange={(e) => updateNames(names.map((n, idx) => (idx === i ? e.target.value : n)))}
-            placeholder={`Joueur ${i + 1}`}
+            placeholder={t.playerPlaceholder(i + 1)}
           />
         </div>
       ))}
       <button type="button" className="setup-panel__cta" onClick={handleSubmit}>
-        Commencer la partie
+        {t.startGame}
       </button>
     </div>
   )

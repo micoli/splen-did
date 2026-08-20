@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import jsQR from 'jsqr'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 interface QRCodeScannerProps {
   onScan: (text: string) => void
@@ -7,6 +8,7 @@ interface QRCodeScannerProps {
 }
 
 export function QRCodeScanner({ onScan, onCancel }: QRCodeScannerProps) {
+  const { t } = useLanguage()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -48,7 +50,7 @@ export function QRCodeScanner({ onScan, onCancel }: QRCodeScannerProps) {
         }
         frameId = requestAnimationFrame(tick)
       })
-      .catch(() => setError("Impossible d'acceder a la camera."))
+      .catch(() => setError(t.cameraError))
 
     return () => {
       stopped = true
@@ -62,7 +64,7 @@ export function QRCodeScanner({ onScan, onCancel }: QRCodeScannerProps) {
       <div>
         <p>{error}</p>
         <button type="button" onClick={onCancel}>
-          Annuler
+          {t.cancel}
         </button>
       </div>
     )
@@ -72,7 +74,7 @@ export function QRCodeScanner({ onScan, onCancel }: QRCodeScannerProps) {
     <div>
       <video ref={videoRef} muted playsInline style={{ width: '100%', maxWidth: 320, borderRadius: 8 }} />
       <button type="button" onClick={onCancel}>
-        Annuler
+        {t.cancel}
       </button>
     </div>
   )

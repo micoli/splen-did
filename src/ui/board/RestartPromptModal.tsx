@@ -1,3 +1,5 @@
+import { useLanguage } from '../../i18n/LanguageContext'
+
 interface RestartPromptModalProps {
   message: string
   onAccept: () => void
@@ -5,17 +7,18 @@ interface RestartPromptModalProps {
 }
 
 export function RestartPromptModal({ message, onAccept, onDecline }: RestartPromptModalProps) {
+  const { t } = useLanguage()
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Redemarrer la partie ?</h3>
+        <h3>{t.restartTitle}</h3>
         <p>{message}</p>
         <div style={{ display: 'flex', gap: 8 }}>
           <button type="button" className="btn-primary" onClick={onAccept}>
-            Accepter
+            {t.restartAccept}
           </button>
           <button type="button" onClick={onDecline}>
-            Refuser
+            {t.restartDecline}
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../../i18n/LanguageContext'
 import type { PeerHandle } from '../../net/webrtc'
 import { P2PHostScreen } from './P2PHostScreen'
 import { P2PJoinScreen } from './P2PJoinScreen'
@@ -10,19 +11,20 @@ interface P2PSetupFlowProps {
 type Choice = 'none' | 'host' | 'join'
 
 export function P2PSetupFlow({ onConnected }: P2PSetupFlowProps) {
+  const { t } = useLanguage()
   const [choice, setChoice] = useState<Choice>('none')
 
   if (choice === 'none') {
     return (
       <div className="setup-panel">
-        <h3>Partie en ligne (P2P, sans serveur)</h3>
-        <p>Aucun serveur n'est utilise : un code doit etre echange manuellement entre les deux joueurs.</p>
+        <h3>{t.p2pTitle}</h3>
+        <p>{t.p2pDescription}</p>
         <div className="setup-panel__actions">
           <button type="button" onClick={() => setChoice('host')}>
-            Heberger
+            {t.p2pHost}
           </button>
           <button type="button" onClick={() => setChoice('join')}>
-            Rejoindre
+            {t.p2pJoin}
           </button>
         </div>
       </div>

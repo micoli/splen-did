@@ -4,6 +4,9 @@ import type { Action, CardLevel, GameState, Token, TokenColor } from '../../engi
 import type { PlayedAction } from '../../hooks/useGameEngine'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { useTheme } from '../../hooks/useTheme'
+import { useLanguage } from '../../i18n/LanguageContext'
+import type { Translations } from '../../i18n/translations'
+import { LanguageToggle } from '../shared/LanguageToggle'
 import { ActionBar } from './ActionBar'
 import type { InteractionMode } from './ActionBar'
 import { CardGrid } from './CardGrid'
@@ -18,29 +21,14 @@ import './board.css'
 
 const AI_HIGHLIGHT_DURATION_MS = 3200
 
-const TOKEN_COLOR_LABELS: Record<TokenColor, string> = {
-  white: 'blanc',
-  blue: 'bleu',
-  green: 'vert',
-  red: 'rouge',
-  black: 'noir',
-}
-
-function describeAction(action: Action, playerName: string): string {
-  switch (action.type) {
-    case 'TAKE_THREE_DIFFERENT':
-      return `${playerName} a pris 3 jetons : ${action.colors.map((c) => TOKEN_COLOR_LABELS[c]).join(', ')}`
-    case 'TAKE_TWO_SAME':
-      return `${playerName} a pris 2 jetons ${TOKEN_COLOR_LABELS[action.color]}`
-    case 'RESERVE_CARD':
-      return `${playerName} a reserve une carte`
-    case 'PURCHASE_CARD':
-      return `${playerName} a achete une carte niveau ${getCardDef(action.cardId).level} (${getCardDef(action.cardId).points} pts)`
-    case 'CLAIM_NOBLE':
-      return `${playerName} a courtise un noble (${getNobleDef(action.nobleId).points} pts)`
-    case 'DISCARD_TOKENS':
-      return `${playerName} a defausse des jetons`
-  }
+function describeAction(action: Action, playerName: string, t: Translations): string {
+  return t.describeAction(action, {
+    playerName,
+    colorLabel: t.tokenColorLabel,
+    cardLevel: (cardId) => getCardDef(cardId).level,
+    cardPoints: (cardId) => getCardDef(cardId).points,
+    noblePoints: (nobleId) => getNobleDef(nobleId).points,
+  })
 }
 
 interface BoardProps {
@@ -85,6 +73,7 @@ export function Board({
   const isCompactActionBar = useMediaQuery('(max-width: 640px)')
   const isWideLayout = useMediaQuery('(min-width: 641px)')
   const { theme, toggleTheme } = useTheme()
+  const { t } = useLanguage()
 
   useEffect(() => {
     setMode('idle')
@@ -124,7 +113,7 @@ export function Board({
     if (!actor?.isAI) return
     const { action, purchasedSlot } = lastPlayedAction
     setAiAction({
-      message: describeAction(action, actor.name),
+      message: describeAction(action, actor.name, t),
       colors: action.type === 'TAKE_THREE_DIFFERENT' ? action.colors : action.type === 'TAKE_TWO_SAME' ? [action.color] : undefined,
       purchasedSlot: purchasedSlot && action.type === 'PURCHASE_CARD' ? { ...purchasedSlot, cardId: action.cardId } : undefined,
     })
@@ -206,12 +195,12 @@ export function Board({
   const actionBarPanel = (
     <div className="panel board-panel action-bar-panel">
       {isStickyActionBar && (
-        <span className="turn-star" aria-label={isMyTurn ? 'Ton tour' : 'Tour adverse'}>
+        <span className="turn-star" aria-label={isMyTurn ? t.yourTurn : t.opponentTurn}>
           {isMyTurn ? '★' : '☆'}
         </span>
       )}
       {isAITurn ? (
-        <p>L'IA reflechit...</p>
+        <p>{t.aiThinking}</p>
       ) : (
         <ActionBar
           mode={mode}
@@ -235,7 +224,7 @@ export function Board({
   const discardingPlayer = state.turnPhase === 'discard' ? state.players.find((p) => p.id === currentPlayerId) : undefined
 
   function handleExit() {
-    if (window.confirm('Quitter la partie et revenir a l\'accueil ?')) onExit()
+    if (window.confirm(t.exitConfirm)) onExit()
   }
 
   return (
@@ -276,7 +265,7 @@ export function Board({
 
       <div className="board-side">
         {isSidebarLayout && (
-          <div className="turn-banner">{isAITurn ? "L'IA reflechit..." : `Au tour de ${currentPlayer?.name}`}</div>
+          <div className="turn-banner">{isAITurn ? t.aiThinking : t.turnOf(currentPlayer?.name ?? '')}</div>
         )}
         {isSidebarLayout && actionBarPanel}
         {state.players.map((player) => (
@@ -295,7 +284,7 @@ export function Board({
 
       {isWideLayout && actionLog && (
         <div className="board-log panel">
-          <h3>Historique</h3>
+          <h3>{t.history}</h3>
           <ul className="board-log__list">
             {actionLog
               .map((entry, index) => ({ entry, index }))
@@ -303,7 +292,7 @@ export function Board({
               .map(({ entry, index }) => {
                 const actor = state.players.find((p) => p.id === entry.playerId)
                 return (
-                  <li key={index}>{describeAction(entry.action, actor?.name ?? '?')}</li>
+                  <li key={index}>{describeAction(entry.action, actor?.name ?? '?', t)}</li>
                 )
               })}
           </ul>
@@ -313,20 +302,23 @@ export function Board({
       <div className="board-footer panel">
         {!state.gameOver && (
           <button type="button" onClick={onProposeRestart} disabled={restartAwaiting}>
-            {restartAwaiting ? 'En attente de la reponse...' : 'Proposer un redemarrage'}
+            {restartAwaiting ? t.awaitingResponse : t.proposeRestart}
           </button>
         )}
         <button type="button" onClick={handleExit}>
-          Retour a l'accueil
+          {t.backHome}
         </button>
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
-        >
-          {theme === 'dark' ? '🌙' : '☀️'}
-        </button>
+        <div className="board-footer__toggles">
+          <LanguageToggle />
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? t.lightMode : t.darkMode}
+          >
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+        </div>
       </div>
 
       {discardingPlayer && isMyTurn && (
@@ -358,7 +350,7 @@ export function Board({
 
       {aiAction && <div className="ai-action-toast">{aiAction.message}</div>}
 
-      {showYourTurnToast && <div className="your-turn-toast">C'est a toi !</div>}
+      {showYourTurnToast && <div className="your-turn-toast">{t.yourTurnToast}</div>}
     </div>
   )
 }

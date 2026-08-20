@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import QRCode from 'qrcode'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 interface QRCodeDisplayProps {
   value: string
 }
 
 export function QRCodeDisplay({ value }: QRCodeDisplayProps) {
+  const { t } = useLanguage()
   const [dataUrl, setDataUrl] = useState<string | null>(null)
   const [tooLong, setTooLong] = useState(false)
 
@@ -33,7 +35,7 @@ export function QRCodeDisplay({ value }: QRCodeDisplayProps) {
     }
   }, [value])
 
-  if (tooLong) return <p>Code trop long pour un QR code, utilisez le copier-coller.</p>
+  if (tooLong) return <p>{t.qrTooLong}</p>
   if (!dataUrl) return null
 
   return <img src={dataUrl} alt="QR code" width={220} height={220} />

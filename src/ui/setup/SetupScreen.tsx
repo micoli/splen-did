@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
+import { useLanguage } from '../../i18n/LanguageContext'
 import type { PeerHandle } from '../../net/webrtc'
 import { GemIcon } from '../shared/GemIcon'
+import { LanguageToggle } from '../shared/LanguageToggle'
 import { HotseatSetupForm } from './HotseatSetupForm'
 import { ModeSelect } from './ModeSelect'
 import type { GameMode } from './ModeSelect'
@@ -16,17 +18,21 @@ interface SetupScreenProps {
 
 export function SetupScreen({ onStart, onP2PConnected }: SetupScreenProps) {
   const [mode, setMode] = useState<GameMode>('solo')
+  const { t } = useLanguage()
 
   return (
     <div className="setup-screen">
       <div className="setup-screen__inner">
+        <div className="setup-screen__lang">
+          <LanguageToggle />
+        </div>
         <div className="setup-screen__header">
           <h1 className="setup-screen__title">
             <GemIcon color="blue" size="medium" />
             Splen-did
             <GemIcon color="red" size="medium" />
           </h1>
-          <p className="setup-screen__tagline">Collectionnez des gemmes, courtisez des nobles, gagnez la partie.</p>
+          <p className="setup-screen__tagline">{t.appTagline}</p>
         </div>
         <ModeSelect mode={mode} onSelect={setMode} />
         {mode === 'solo' && <SoloSetupForm onStart={onStart} />}

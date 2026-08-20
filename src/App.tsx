@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { decodeGameLink } from './engine/gameLink'
 import type { PlayerConfig } from './engine/setup'
+import { useLanguage, LanguageProvider } from './i18n/LanguageContext'
 import type { PeerHandle } from './net/webrtc'
 import { GameScreen } from './ui/GameScreen'
 import { P2PGameScreen } from './ui/P2PGameScreen'
@@ -33,7 +34,16 @@ function clearHash() {
 }
 
 function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  )
+}
+
+function AppContent() {
   const [session, setSession] = useState<Session | null>(initialSession)
+  const { t } = useLanguage()
 
   if (!session) {
     return (
@@ -67,8 +77,8 @@ function App() {
       key={session.key}
       role={session.role}
       handle={session.handle}
-      hostName="Hote"
-      guestName="Invite"
+      hostName={t.hostPlayerName}
+      guestName={t.guestPlayerName}
       onExit={() => setSession(null)}
     />
   )

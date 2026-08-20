@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../../i18n/LanguageContext'
 import { createAnswerFromOffer, onChannelOpen } from '../../net/webrtc'
 import type { PeerHandle } from '../../net/webrtc'
 import { CopyButton } from '../shared/CopyButton'
@@ -12,6 +13,7 @@ interface P2PJoinScreenProps {
 type Step = 'idle' | 'answer-ready'
 
 export function P2PJoinScreen({ onConnected }: P2PJoinScreenProps) {
+  const { t } = useLanguage()
   const [step, setStep] = useState<Step>('idle')
   const [offerInput, setOfferInput] = useState('')
   const [answerBlob, setAnswerBlob] = useState('')
@@ -26,16 +28,16 @@ export function P2PJoinScreen({ onConnected }: P2PJoinScreenProps) {
       setStep('answer-ready')
       onChannelOpen(handle, () => onConnected(handle))
     } catch {
-      setError('Code invalide, verifiez le texte colle.')
+      setError(t.joinInvalidCode)
     }
   }
 
   return (
     <div className="panel">
-      <h3>Rejoindre une partie</h3>
+      <h3>{t.joinTitle}</h3>
       {step === 'idle' && (
         <>
-          <p>Collez ici le code recu de l'hote, ou scannez son QR code :</p>
+          <p>{t.joinStep1}</p>
           {scanning ? (
             <QRCodeScanner
               onScan={(text) => {
@@ -51,26 +53,26 @@ export function P2PJoinScreen({ onConnected }: P2PJoinScreenProps) {
                 onChange={(e) => setOfferInput(e.target.value)}
                 rows={4}
                 style={{ width: '100%' }}
-                placeholder="Code de l'hote"
+                placeholder={t.joinOfferPlaceholder}
               />
               <button type="button" onClick={() => setScanning(true)}>
-                Scanner un QR code
+                {t.scanQRCode}
               </button>
             </>
           )}
           <button type="button" className="btn-primary" onClick={handleJoin} disabled={!offerInput.trim()}>
-            Rejoindre
+            {t.joinAction}
           </button>
         </>
       )}
 
       {step === 'answer-ready' && (
         <>
-          <p>Renvoyez ce code a l'hote pour finaliser la connexion, ou faites-lui scanner le QR code :</p>
+          <p>{t.joinStep2}</p>
           <textarea readOnly value={answerBlob} rows={4} style={{ width: '100%' }} onClick={(e) => e.currentTarget.select()} />
           <CopyButton text={answerBlob} />
           <QRCodeDisplay value={answerBlob} />
-          <p>En attente de connexion...</p>
+          <p>{t.joinWaiting}</p>
         </>
       )}
 

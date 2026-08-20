@@ -1,5 +1,6 @@
 import { getCardDef } from '../../engine/selectors'
 import type { CardLevel } from '../../engine/types'
+import { useLanguage } from '../../i18n/LanguageContext'
 import { DevelopmentCard } from './DevelopmentCard'
 
 interface CardRowProps {
@@ -25,6 +26,8 @@ export function CardRow({
   deckClickable,
   highlightedIndex,
 }: CardRowProps) {
+  const { t } = useLanguage()
+
   return (
     <div className={`card-row card-row--level-${level}`}>
       {deckCount !== undefined && (
@@ -32,7 +35,7 @@ export function CardRow({
       )}
       {deckClickable && (
         <button type="button" className="card-row__deck-reserve" onClick={onDeckClick}>
-          Piocher une carte
+          {t.deckReserve}
         </button>
       )}
       <div className="card-row__cards">

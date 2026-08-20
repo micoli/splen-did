@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../../i18n/LanguageContext'
 import { acceptAnswer, createOffer, onChannelOpen } from '../../net/webrtc'
 import type { PeerHandle } from '../../net/webrtc'
 import { CopyButton } from '../shared/CopyButton'
@@ -12,6 +13,7 @@ interface P2PHostScreenProps {
 type Step = 'idle' | 'offer-ready' | 'connecting'
 
 export function P2PHostScreen({ onConnected }: P2PHostScreenProps) {
+  const { t } = useLanguage()
   const [step, setStep] = useState<Step>('idle')
   const [handle, setHandle] = useState<PeerHandle | null>(null)
   const [offerBlob, setOfferBlob] = useState('')
@@ -35,27 +37,27 @@ export function P2PHostScreen({ onConnected }: P2PHostScreenProps) {
       setStep('connecting')
       onChannelOpen(handle, () => onConnected(handle))
     } catch {
-      setError('Reponse invalide, verifiez le texte colle.')
+      setError(t.hostInvalidAnswer)
     }
   }
 
   return (
     <div className="panel">
-      <h3>Heberger une partie</h3>
+      <h3>{t.hostTitle}</h3>
       {step === 'idle' && (
         <button type="button" className="btn-primary" onClick={handleCreateOffer}>
-          Creer la partie
+          {t.hostCreate}
         </button>
       )}
 
       {step !== 'idle' && (
         <>
-          <p>1. Envoyez ce code a votre adversaire, ou faites-lui scanner le QR code :</p>
+          <p>1. {t.hostStep1}</p>
           <textarea readOnly value={offerBlob} rows={4} style={{ width: '100%' }} onClick={(e) => e.currentTarget.select()} />
           <CopyButton text={offerBlob} />
           <QRCodeDisplay value={offerBlob} />
 
-          <p>2. Collez ici le code de reponse qu'il vous envoie, ou scannez son QR code :</p>
+          <p>2. {t.hostStep2}</p>
           {scanning ? (
             <QRCodeScanner
               onScan={(text) => {
@@ -71,15 +73,15 @@ export function P2PHostScreen({ onConnected }: P2PHostScreenProps) {
                 onChange={(e) => setAnswerInput(e.target.value)}
                 rows={4}
                 style={{ width: '100%' }}
-                placeholder="Code de reponse"
+                placeholder={t.hostAnswerPlaceholder}
               />
               <button type="button" onClick={() => setScanning(true)}>
-                Scanner un QR code
+                {t.scanQRCode}
               </button>
             </>
           )}
           <button type="button" className="btn-primary" onClick={handleConnect} disabled={!answerInput.trim() || step === 'connecting'}>
-            {step === 'connecting' ? 'Connexion en cours...' : 'Connecter'}
+            {step === 'connecting' ? t.hostConnecting : t.hostConnect}
           </button>
         </>
       )}

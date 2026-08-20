@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { PlayerConfig } from '../../engine/setup'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 const NAME_STORAGE_KEY = 'Splen-did:playerName'
 
@@ -8,7 +9,8 @@ interface SoloSetupFormProps {
 }
 
 export function SoloSetupForm({ onStart }: SoloSetupFormProps) {
-  const [name, setName] = useState(() => localStorage.getItem(NAME_STORAGE_KEY) || 'Joueur')
+  const { t } = useLanguage()
+  const [name, setName] = useState(() => localStorage.getItem(NAME_STORAGE_KEY) || t.defaultPlayerName)
 
   function handleNameChange(value: string) {
     setName(value)
@@ -17,20 +19,20 @@ export function SoloSetupForm({ onStart }: SoloSetupFormProps) {
 
   function handleSubmit() {
     const players: PlayerConfig[] = [
-      { id: 'p1', name: name.trim() || 'Joueur', isAI: false },
-      { id: 'p2', name: 'IA', isAI: true },
+      { id: 'p1', name: name.trim() || t.defaultPlayerName, isAI: false },
+      { id: 'p2', name: t.aiName, isAI: true },
     ]
     onStart(players)
   }
 
   return (
     <div className="setup-panel">
-      <h3>Solo contre l'ordinateur</h3>
+      <h3>{t.soloTitle}</h3>
       <div className="setup-panel__field">
-        <input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="Votre nom" />
+        <input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder={t.namePlaceholder} />
       </div>
       <button type="button" className="setup-panel__cta" onClick={handleSubmit}>
-        Commencer la partie
+        {t.startGame}
       </button>
     </div>
   )

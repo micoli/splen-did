@@ -116,3 +116,10 @@ input:focus, textarea:focus {
 h1, h2, h3 {
   margin: 0;
 }
+
+.lang-toggle {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 8px 10px;
+}

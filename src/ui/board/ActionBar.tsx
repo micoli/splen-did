@@ -1,3 +1,5 @@
+import { useLanguage } from '../../i18n/LanguageContext'
+
 export type InteractionMode = 'idle' | 'take3' | 'take2' | 'reserve' | 'purchase'
 
 interface ActionBarProps {
@@ -31,6 +33,8 @@ export function ActionBar({
   onConfirmTake2,
   compact,
 }: ActionBarProps) {
+  const { t } = useLanguage()
+
   function toggle(next: InteractionMode) {
     onSetMode(mode === next ? 'idle' : next)
   }
@@ -39,29 +43,29 @@ export function ActionBar({
     <div>
       <div className="action-bar">
         <button type="button" className={mode === 'take3' ? 'active' : ''} disabled={!canTake3} onClick={() => toggle('take3')}>
-          {compact ? '+3 💎' : 'Prendre 3 jetons'}
+          {compact ? '+3 💎' : t.take3}
         </button>
         <button type="button" className={mode === 'take2' ? 'active' : ''} disabled={!canTake2} onClick={() => toggle('take2')}>
-          {compact ? '+2 💎' : 'Prendre 2 jetons'}
+          {compact ? '+2 💎' : t.take2}
         </button>
         <button type="button" className={mode === 'reserve' ? 'active' : ''} disabled={!canReserve} onClick={() => toggle('reserve')}>
-          {compact ? '🔖' : 'Réserver une carte'}
+          {compact ? '🔖' : t.reserve}
         </button>
         <button type="button" className={mode === 'purchase' ? 'active' : ''} disabled={!canPurchase} onClick={() => toggle('purchase')}>
-          {compact ? '🛒' : 'Acheter une carte'}
+          {compact ? '🛒' : t.purchase}
         </button>
       </div>
       {mode === 'take3' && (
         <div className="action-bar__confirm">
           <button type="button" disabled={!take3Ready} onClick={onConfirmTake3}>
-            {compact ? `✅ ${take3SelectedCount}/${take3RequiredCount}` : `Confirmer (${take3SelectedCount}/${take3RequiredCount})`}
+            {compact ? `✅ ${take3SelectedCount}/${take3RequiredCount}` : t.confirm(take3SelectedCount, take3RequiredCount)}
           </button>
         </div>
       )}
       {mode === 'take2' && (
         <div className="action-bar__confirm">
           <button type="button" disabled={!take2Ready} onClick={onConfirmTake2}>
-            {compact ? `✅ ${take2Ready ? 1 : 0}/1` : 'Confirmer'}
+            {compact ? `✅ ${take2Ready ? 1 : 0}/1` : t.confirmShort}
           </button>
         </div>
       )}

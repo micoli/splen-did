@@ -34,8 +34,13 @@
   gap: 8px;
 }
 
-.theme-toggle {
+.board-footer__toggles {
   margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.theme-toggle {
   font-size: 18px;
   line-height: 1;
   padding: 8px 12px;
