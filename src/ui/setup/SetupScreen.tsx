@@ -11,6 +11,12 @@ import { P2PSetupFlow } from './P2PSetupFlow'
 import './setup.css'
 import { SoloSetupForm } from './SoloSetupForm'
 
+function formatBuildDate(iso: string): string {
+  const d = new Date(iso)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`
+}
+
 interface SetupScreenProps {
   onStart: (players: PlayerConfig[]) => void
   onP2PConnected: (role: 'host' | 'guest', handle: PeerHandle) => void
@@ -38,6 +44,7 @@ export function SetupScreen({ onStart, onP2PConnected }: SetupScreenProps) {
         {mode === 'solo' && <SoloSetupForm onStart={onStart} />}
         {mode === 'hotseat' && <HotseatSetupForm onStart={onStart} />}
         {mode === 'p2p' && <P2PSetupFlow onConnected={onP2PConnected} />}
+        <p className="setup-screen__build-date">{formatBuildDate(__BUILD_DATE__)}</p>
       </div>
     </div>
   )
