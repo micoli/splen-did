@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { decodeGameLink } from './engine/gameLink'
 import type { PlayerConfig } from './engine/setup'
 import type { PeerHandle } from './net/webrtc'
 import { GameScreen } from './ui/GameScreen'
@@ -9,6 +10,7 @@ interface LocalSession {
   type: 'local'
   players: PlayerConfig[]
   key: number
+  seed?: number
 }
 
 interface P2PSession {
@@ -20,8 +22,18 @@ interface P2PSession {
 
 type Session = LocalSession | P2PSession
 
+function initialSession(): Session | null {
+  const link = decodeGameLink(window.location.hash)
+  if (!link) return null
+  return { type: 'local', players: link.players, key: Date.now(), seed: link.seed }
+}
+
+function clearHash() {
+  history.replaceState(null, '', window.location.pathname + window.location.search)
+}
+
 function App() {
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<Session | null>(initialSession)
 
   if (!session) {
     return (
@@ -37,8 +49,15 @@ function App() {
       <GameScreen
         key={session.key}
         players={session.players}
-        onRematch={() => setSession(null)}
-        onExit={() => setSession(null)}
+        initialSeed={session.seed}
+        onRematch={() => {
+          clearHash()
+          setSession(null)
+        }}
+        onExit={() => {
+          clearHash()
+          setSession(null)
+        }}
       />
     )
   }

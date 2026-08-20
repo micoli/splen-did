@@ -32,7 +32,7 @@ export function CardRow({
       )}
       {deckClickable && (
         <button type="button" className="card-row__deck-reserve" onClick={onDeckClick}>
-          Piocher
+          Piocher une carte
         </button>
       )}
       <div className="card-row__cards">

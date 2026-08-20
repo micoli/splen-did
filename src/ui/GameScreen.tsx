@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
-import { createInitialState } from '../engine/setup'
+import { useEffect, useMemo, useState } from 'react'
+import { createSeededRng, createInitialState } from '../engine/setup'
 import type { PlayerConfig } from '../engine/setup'
+import { encodeGameLink } from '../engine/gameLink'
 import { useAIPlayer } from '../hooks/useAIPlayer'
 import { useBeforeUnloadWarning } from '../hooks/useBeforeUnloadWarning'
 import { useGameEngine } from '../hooks/useGameEngine'
@@ -8,6 +9,7 @@ import { Board } from './board/Board'
 
 interface GameScreenProps {
   players: PlayerConfig[]
+  initialSeed?: number
   onRematch: () => void
   onExit: () => void
 }
@@ -19,12 +21,22 @@ interface RestartConfirming {
 
 type RestartState = { phase: 'idle' } | RestartConfirming
 
-export function GameScreen({ players, onRematch, onExit }: GameScreenProps) {
-  const initialState = useMemo(() => createInitialState({ players }), [players])
+function randomSeed(): number {
+  return Math.floor(Math.random() * 2 ** 31)
+}
+
+export function GameScreen({ players, initialSeed, onRematch, onExit }: GameScreenProps) {
+  const isSolo = players.some((p) => p.isAI)
+  const [seed, setSeed] = useState(() => initialSeed ?? randomSeed())
+  const initialState = useMemo(() => createInitialState({ players, rng: createSeededRng(seed) }), [players, seed])
   const { state, dispatch, legalActions, currentPlayerId, lastError, lastPlayedAction, actionLog, resetState } =
     useGameEngine(initialState)
   useAIPlayer(state, dispatch)
-  useBeforeUnloadWarning()
+  useBeforeUnloadWarning(!isSolo)
+
+  useEffect(() => {
+    window.location.hash = encodeGameLink(seed, players)
+  }, [seed, players])
 
   const [restart, setRestart] = useState<RestartState>({ phase: 'idle' })
 
@@ -42,7 +54,9 @@ export function GameScreen({ players, onRematch, onExit }: GameScreenProps) {
       if (prev.phase !== 'confirming') return prev
       const [, ...rest] = prev.pendingIds
       if (rest.length === 0) {
-        resetState(createInitialState({ players }))
+        const nextSeed = randomSeed()
+        setSeed(nextSeed)
+        resetState(createInitialState({ players, rng: createSeededRng(nextSeed) }))
         return { phase: 'idle' }
       }
       return { phase: 'confirming', pendingIds: rest }
