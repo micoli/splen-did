@@ -16,10 +16,12 @@ import type { Action, CardLevel, GameState, PlayerState, Token, TokenColor } fro
 export interface ReducerResult {
   state: GameState
   error?: string
+  autoClaimedNobleId?: string
 }
 
-function ok(state: GameState): ReducerResult {
-  return { state }
+function ok(result: GameState | TurnPhaseResult): ReducerResult {
+  if ('state' in result) return { state: result.state, autoClaimedNobleId: result.autoClaimedNobleId }
+  return { state: result }
 }
 
 function fail(state: GameState, error: string): ReducerResult {
@@ -62,8 +64,13 @@ function removeFromDeckTop(state: GameState, cardId: string): GameState {
   return state
 }
 
+interface TurnPhaseResult {
+  state: GameState
+  autoClaimedNobleId?: string
+}
+
 /** Resolves end-of-action phase transitions. `grantedBonus` marks purchase actions, which can trigger nobles but never discard. */
-function resolveTurnPhase(state: GameState, playerId: string, grantedBonus: boolean): GameState {
+function resolveTurnPhase(state: GameState, playerId: string, grantedBonus: boolean): TurnPhaseResult {
   let next = checkRoundEndTrigger(state)
 
   if (grantedBonus) {
@@ -72,19 +79,19 @@ function resolveTurnPhase(state: GameState, playerId: string, grantedBonus: bool
     if (eligible.length === 1) {
       next = applyClaimNoble(next, playerId, eligible[0].id)
       next = checkRoundEndTrigger(next)
-      return advanceTurn(next)
+      return { state: advanceTurn(next), autoClaimedNobleId: eligible[0].id }
     }
     if (eligible.length > 1) {
-      return { ...next, turnPhase: 'nobleClaim' }
+      return { state: { ...next, turnPhase: 'nobleClaim' } }
     }
-    return advanceTurn(next)
+    return { state: advanceTurn(next) }
   }
 
   const player = next.players.find((p) => p.id === playerId)!
   if (needsDiscard(player)) {
-    return { ...next, turnPhase: 'discard' }
+    return { state: { ...next, turnPhase: 'discard' } }
   }
-  return advanceTurn(next)
+  return { state: advanceTurn(next) }
 }
 
 function applyClaimNoble(state: GameState, playerId: string, nobleId: string): GameState {

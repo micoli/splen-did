@@ -31,15 +31,18 @@ export function useGameEngine(initialState: GameState) {
 
   const dispatch = useCallback(
     (action: Action) => {
-      const { state: next, error } = gameReducer(state, action, player.id)
+      const { state: next, error, autoClaimedNobleId } = gameReducer(state, action, player.id)
       if (error) {
         setLastError(error)
         return
       }
       setLastError(null)
       const played = { action, playerId: player.id, purchasedSlot: findPurchasedSlot(state, action) }
+      const entries = autoClaimedNobleId
+        ? [played, { action: { type: 'CLAIM_NOBLE', nobleId: autoClaimedNobleId } as Action, playerId: player.id }]
+        : [played]
       setLastPlayedAction(played)
-      setActionLog((prev) => [...prev, played])
+      setActionLog((prev) => [...prev, ...entries])
       setState(next)
     },
     [state, player.id]
