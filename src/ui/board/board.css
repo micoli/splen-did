@@ -34,6 +34,13 @@
   gap: 8px;
 }
 
+.theme-toggle {
+  margin-left: auto;
+  font-size: 18px;
+  line-height: 1;
+  padding: 8px 12px;
+}
+
 .board-log {
   display: flex;
   flex-direction: column;

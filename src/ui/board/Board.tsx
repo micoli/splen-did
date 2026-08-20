@@ -3,6 +3,7 @@ import { getCardDef, getNobleDef, totalTokens } from '../../engine/selectors'
 import type { Action, CardLevel, GameState, Token, TokenColor } from '../../engine/types'
 import type { PlayedAction } from '../../hooks/useGameEngine'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useTheme } from '../../hooks/useTheme'
 import { ActionBar } from './ActionBar'
 import type { InteractionMode } from './ActionBar'
 import { CardGrid } from './CardGrid'
@@ -83,6 +84,7 @@ export function Board({
   const isSidebarLayout = !isStickyActionBar
   const isCompactActionBar = useMediaQuery('(max-width: 640px)')
   const isWideLayout = useMediaQuery('(min-width: 641px)')
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     setMode('idle')
@@ -316,6 +318,14 @@ export function Board({
         )}
         <button type="button" onClick={handleExit}>
           Retour a l'accueil
+        </button>
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+        >
+          {theme === 'dark' ? '🌙' : '☀️'}
         </button>
       </div>
 

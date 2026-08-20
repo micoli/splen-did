@@ -20,13 +20,26 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #1c1a17;
     --panel-bg: #262320;
     --text: #f0ece2;
     --text-muted: #a89f8e;
     --border: #3a352e;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c1a17;
+  --panel-bg: #262320;
+  --text: #f0ece2;
+  --text-muted: #a89f8e;
+  --border: #3a352e;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 * {
