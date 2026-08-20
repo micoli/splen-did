@@ -120,6 +120,8 @@ export interface Translations {
   exitConfirm: string
   lightMode: string
   darkMode: string
+  gameAidOn: string
+  gameAidOff: string
   yourTurnToast: string
   deckReserve: string
 
@@ -215,6 +217,8 @@ const fr: Translations = {
   exitConfirm: "Quitter la partie et revenir a l'accueil ?",
   lightMode: 'Passer en mode clair',
   darkMode: 'Passer en mode sombre',
+  gameAidOn: 'Desactiver la mise en evidence des cartes achetables',
+  gameAidOff: 'Activer la mise en evidence des cartes achetables',
   yourTurnToast: "C'est a toi !",
   deckReserve: 'Piocher une carte',
 
@@ -310,6 +314,8 @@ const en: Translations = {
   exitConfirm: 'Leave the game and go back to the home page?',
   lightMode: 'Switch to light mode',
   darkMode: 'Switch to dark mode',
+  gameAidOn: 'Turn off highlighting of purchasable cards',
+  gameAidOff: 'Turn on highlighting of purchasable cards',
   yourTurnToast: "It's your turn!",
   deckReserve: 'Draw a card',
 

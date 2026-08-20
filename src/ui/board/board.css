@@ -46,6 +46,17 @@
   padding: 8px 12px;
 }
 
+.game-aid-toggle {
+  font-size: 18px;
+  line-height: 1;
+  padding: 8px 12px;
+  opacity: 0.45;
+}
+
+.game-aid-toggle.active {
+  opacity: 1;
+}
+
 .board-log {
   display: flex;
   flex-direction: column;

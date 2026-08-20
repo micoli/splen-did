@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getCardDef, getNobleDef, totalTokens } from '../../engine/selectors'
 import type { Action, CardLevel, GameState, Token, TokenColor } from '../../engine/types'
 import type { PlayedAction } from '../../hooks/useGameEngine'
+import { useGameAid } from '../../hooks/useGameAid'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { useTheme } from '../../hooks/useTheme'
 import { useLanguage } from '../../i18n/LanguageContext'
@@ -83,6 +84,7 @@ export function Board({
 
   const currentPlayer = state.players.find((p) => p.id === currentPlayerId)
   const isMyTurn = localPlayerId ? currentPlayerId === localPlayerId : !currentPlayer?.isAI
+  const { enabled: gameAidEnabled, toggle: toggleGameAid } = useGameAid(currentPlayer?.name ?? '')
 
   useEffect(() => {
     if (!isMyTurn) return
@@ -208,7 +210,7 @@ export function Board({
           canTake3={take3Actions.length > 0}
           canTake2={take2Actions.length > 0}
           canReserve={reserveActions.length > 0}
-          canPurchase={purchaseActions.length > 0}
+          canPurchase={gameAidEnabled || purchaseActions.length > 0}
           take3Ready={selectedColors.length === take3RequiredCount}
           take3RequiredCount={take3RequiredCount}
           take3SelectedCount={selectedColors.length}
@@ -254,7 +256,7 @@ export function Board({
           visibleCards={displayVisibleCards}
           deckCounts={{ 1: state.decks[1].length, 2: state.decks[2].length, 3: state.decks[3].length }}
           clickableCardIds={mode === 'reserve' ? reservableCardIds : mode === 'purchase' ? purchasableVisibleIds : undefined}
-          affordableCardIds={mode === 'purchase' ? purchasableVisibleIds : undefined}
+          affordableCardIds={mode === 'purchase' && gameAidEnabled ? purchasableVisibleIds : undefined}
           onCardClick={onCardClick}
           highlightedSlot={aiAction?.purchasedSlot}
           clickableDeckLevels={mode === 'reserve' ? reservableDeckLevels : undefined}
@@ -276,7 +278,9 @@ export function Board({
             clickableReservedCardIds={
               player.id === currentPlayerId && mode === 'purchase' ? purchasableReservedIds : undefined
             }
-            affordableReservedCardIds={player.id === currentPlayerId ? purchasableReservedIds : undefined}
+            affordableReservedCardIds={
+              player.id === currentPlayerId && gameAidEnabled ? purchasableReservedIds : undefined
+            }
             onReservedCardClick={onCardClick}
           />
         ))}
@@ -317,6 +321,14 @@ export function Board({
             aria-label={theme === 'dark' ? t.lightMode : t.darkMode}
           >
             {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+          <button
+            type="button"
+            className={`game-aid-toggle${gameAidEnabled ? ' active' : ''}`}
+            onClick={toggleGameAid}
+            aria-label={gameAidEnabled ? t.gameAidOn : t.gameAidOff}
+          >
+            ❓
           </button>
         </div>
       </div>
